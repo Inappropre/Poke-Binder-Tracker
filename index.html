@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Pokémon Binder</title>
+<style>
+:root{box-sizing:border-box;--bg:#f6f6f3;--card:#fff;--tx:#1d1d1b;--mut:#76766f;--bd:#e0e0d8;--ac:#d63a2f;--ok:#2e9e5b;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141413;--card:#222220;--tx:#f0f0ea;--mut:#9a9a92;--bd:#38382f;--ac:#ef5a4e;--ok:#4cc27c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141413;--card:#222220;--tx:#f0f0ea;--mut:#9a9a92;--bd:#38382f;--ac:#ef5a4e;--ok:#4cc27c;color-scheme:dark}
+*,*:before,*:after{box-sizing:inherit}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 -apple-system,system-ui,"Segoe UI",sans-serif}
+header{padding:12px 16px 4px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+h1{font-size:19px;margin:0}h2{font-size:16px;margin:18px 0 8px}
+#prog{color:var(--mut);font-size:13px;white-space:nowrap}
+main{padding:8px 16px 90px}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;padding:13px 0;border:0;background:none;color:var(--mut);font:600 14px inherit}
+nav button.on{color:var(--ac)}
+input,select,textarea,button{font:inherit;color:inherit}
+input[type=search],input[type=text],input[type=number],input:not([type]),select,textarea{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);font-size:16px}
+input[type=checkbox]{width:22px;height:22px;accent-color:var(--ok);flex:none}
+.chips{display:flex;gap:8px;margin:10px 0}
+.chips button,.pri,#ex,#im,.add button{border:1px solid var(--bd);background:var(--card);border-radius:999px;padding:7px 14px;text-transform:capitalize}
+.chips .on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.pri{background:var(--ac);color:#fff;border-color:var(--ac);width:100%;padding:12px;border-radius:10px;margin-top:12px;text-transform:none}
+.danger{margin-top:14px;width:100%;padding:11px;border:1px solid var(--ac);color:var(--ac);background:none;border-radius:10px}
+.row{display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid var(--bd)}
+.row img{width:44px;height:44px;object-fit:contain;flex:none}.tile img{flex:1 1 0;min-height:0;max-width:100%;object-fit:contain}.sheet h2 img{width:56px;height:56px;object-fit:contain;vertical-align:middle}
+.num{color:var(--mut);width:48px;font-size:13px;font-variant-numeric:tabular-nums}
+.row b{flex:1;font-weight:600}.row small{color:var(--mut);font-size:12px}
+.empty{color:var(--mut);text-align:center;padding:30px}
+.nav{display:flex;align-items:center;justify-content:space-between;text-align:center;margin:6px 0 12px}
+.nav div{display:flex;flex-direction:column}.nav small{color:var(--mut)}
+.nav button{width:52px;height:44px;border-radius:12px;border:1px solid var(--bd);background:var(--card);font-size:18px}
+.grid{display:grid;gap:8px}
+.tile{position:relative;--c:var(--bd);--c2:transparent;aspect-ratio:5/7;background:transparent;border:2px dashed color-mix(in srgb,var(--c) 50%,transparent);border-radius:10px;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;overflow:hidden;min-width:0}
+.tile b{font-size:13px;line-height:1.15;word-break:break-word}.tile small{color:var(--mut);font-size:11px}
+.tile.got{border-style:solid;border-color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent)}
+.tile:before{content:attr(data-t);position:absolute;right:-2px;bottom:-4px;font-size:46px;font-weight:700;line-height:1;color:color-mix(in srgb,var(--c) 14%,transparent);pointer-events:none}
+.tile:after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--c2)}
+.tile:not(.got) img{filter:grayscale(1);opacity:.45}.tile input{position:absolute;top:4px;right:4px}
+.tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;margin-top:2px}.tag{font-size:10px;line-height:1.5;padding:0 6px;border-radius:6px;background:color-mix(in srgb,var(--tc) 30%,transparent);text-transform:capitalize;font-weight:500;color:var(--tx)}
+.row b .tags{justify-content:flex-start}.sheet .tags{justify-content:flex-start;margin:0 0 8px}.tile.hl{box-shadow:0 0 0 3px var(--ac)}
+.tile.ghost{background:none;border-style:dashed}
+.cnt{text-align:center;color:var(--mut);margin-top:12px}
+label{display:block;margin:10px 0;font-size:13px;color:var(--mut)}label input,label select{margin-top:4px;color:var(--tx)}
+.two{display:flex;gap:10px}.two>*{flex:1}
+.sum{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px;margin:10px 0}
+#modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:flex-end;z-index:5}
+#modal.open{display:flex}
+.sheet{background:var(--bg);width:100%;border-radius:18px 18px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));max-height:80%;overflow:auto}
+.sheet h2{margin-top:0}.own{display:flex;gap:10px;align-items:center;color:var(--tx);font-size:16px}
+.var{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd)}
+.var button{border:0;background:none;color:var(--mut);font-size:16px}
+.add{display:flex;gap:8px;margin-top:10px}
+.gen{margin:12px 0}.gh{display:flex;gap:8px;align-items:baseline;margin-bottom:4px}.gh small{color:var(--mut)}.gh small:last-child{margin-left:auto}
+.bar{height:10px;background:var(--bd);border-radius:6px;overflow:hidden}.fill{height:100%;background:var(--ac);border-radius:6px;transition:width .4s}.fill.full{background:var(--ok)}
+.fine{color:var(--mut);font-size:12px;margin-top:22px}.cnt.ok{color:var(--ok);font-weight:600}
+.grid.done{outline:2px solid var(--ok);outline-offset:6px;border-radius:12px;margin:8px 6px}
+.fl{position:fixed;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:center;z-index:9}
+.fb{background:var(--card);border:2px solid var(--ok);color:var(--ok);font-weight:700;padding:12px 22px;border-radius:14px;animation:pop 1.6s ease both}
+.fl i{position:absolute;width:9px;height:9px;border-radius:2px;animation:fly 1.1s ease-out both}
+@keyframes pop{0%{transform:scale(.6);opacity:0}15%{transform:scale(1.08);opacity:1}25%{transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:translateY(-10px)}}
+@keyframes fly{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--x),var(--y)) rotate(240deg) scale(.4);opacity:0}}
+@media (prefers-reduced-motion:reduce){.fl i{display:none}}
+</style><link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="theme-color" content="#d63a2f">
+</head><body>
+<header><h1 id="title"></h1><div id="prog"></div></header>
+<main id="main"></main>
+<nav><button data-t="list">List</button><button data-t="binder">Binder</button><button data-t="stats">Progress</button><button data-t="setup">Setup</button></nav>
+<div id="modal"></div>
+<script>
+const N="Bulbasaur,Ivysaur,Venusaur,Charmander,Charmeleon,Charizard,Squirtle,Wartortle,Blastoise,Caterpie,Metapod,Butterfree,Weedle,Kakuna,Beedrill,Pidgey,Pidgeotto,Pidgeot,Rattata,Raticate,Spearow,Fearow,Ekans,Arbok,Pikachu,Raichu,Sandshrew,Sandslash,Nidoran♀,Nidorina,Nidoqueen,Nidoran♂,Nidorino,Nidoking,Clefairy,Clefable,Vulpix,Ninetales,Jigglypuff,Wigglytuff,Zubat,Golbat,Oddish,Gloom,Vileplume,Paras,Parasect,Venonat,Venomoth,Diglett,Dugtrio,Meowth,Persian,Psyduck,Golduck,Mankey,Primeape,Growlithe,Arcanine,Poliwag,Poliwhirl,Poliwrath,Abra,Kadabra,Alakazam,Machop,Machoke,Machamp,Bellsprout,Weepinbell,Victreebel,Tentacool,Tentacruel,Geodude,Graveler,Golem,Ponyta,Rapidash,Slowpoke,Slowbro,Magnemite,Magneton,Farfetch’d,Doduo,Dodrio,Seel,Dewgong,Grimer,Muk,Shellder,Cloyster,Gastly,Haunter,Gengar,Onix,Drowzee,Hypno,Krabby,Kingler,Voltorb,Electrode,Exeggcute,Exeggutor,Cubone,Marowak,Hitmonlee,Hitmonchan,Lickitung,Koffing,Weezing,Rhyhorn,Rhydon,Chansey,Tangela,Kangaskhan,Horsea,Seadra,Goldeen,Seaking,Staryu,Starmie,Mr. Mime,Scyther,Jynx,Electabuzz,Magmar,Pinsir,Tauros,Magikarp,Gyarados,Lapras,Ditto,Eevee,Vaporeon,Jolteon,Flareon,Porygon,Omanyte,Omastar,Kabuto,Kabutops,Aerodactyl,Snorlax,Articuno,Zapdos,Moltres,Dratini,Dragonair,Dragonite,Mewtwo,Mew,Chikorita,Bayleef,Meganium,Cyndaquil,Quilava,Typhlosion,Totodile,Croconaw,Feraligatr,Sentret,Furret,Hoothoot,Noctowl,Ledyba,Ledian,Spinarak,Ariados,Crobat,Chinchou,Lanturn,Pichu,Cleffa,Igglybuff,Togepi,Togetic,Natu,Xatu,Mareep,Flaaffy,Ampharos,Bellossom,Marill,Azumarill,Sudowoodo,Politoed,Hoppip,Skiploom,Jumpluff,Aipom,Sunkern,Sunflora,Yanma,Wooper,Quagsire,Espeon,Umbreon,Murkrow,Slowking,Misdreavus,Unown,Wobbuffet,Girafarig,Pineco,Forretress,Dunsparce,Gligar,Steelix,Snubbull,Granbull,Qwilfish,Scizor,Shuckle,Heracross,Sneasel,Teddiursa,Ursaring,Slugma,Magcargo,Swinub,Piloswine,Corsola,Remoraid,Octillery,Delibird,Mantine,Skarmory,Houndour,Houndoom,Kingdra,Phanpy,Donphan,Porygon2,Stantler,Smeargle,Tyrogue,Hitmontop,Smoochum,Elekid,Magby,Miltank,Blissey,Raikou,Entei,Suicune,Larvitar,Pupitar,Tyranitar,Lugia,Ho-Oh,Celebi,Treecko,Grovyle,Sceptile,Torchic,Combusken,Blaziken,Mudkip,Marshtomp,Swampert,Poochyena,Mightyena,Zigzagoon,Linoone,Wurmple,Silcoon,Beautifly,Cascoon,Dustox,Lotad,Lombre,Ludicolo,Seedot,Nuzleaf,Shiftry,Taillow,Swellow,Wingull,Pelipper,Ralts,Kirlia,Gardevoir,Surskit,Masquerain,Shroomish,Breloom,Slakoth,Vigoroth,Slaking,Nincada,Ninjask,Shedinja,Whismur,Loudred,Exploud,Makuhita,Hariyama,Azurill,Nosepass,Skitty,Delcatty,Sableye,Mawile,Aron,Lairon,Aggron,Meditite,Medicham,Electrike,Manectric,Plusle,Minun,Volbeat,Illumise,Roselia,Gulpin,Swalot,Carvanha,Sharpedo,Wailmer,Wailord,Numel,Camerupt,Torkoal,Spoink,Grumpig,Spinda,Trapinch,Vibrava,Flygon,Cacnea,Cacturne,Swablu,Altaria,Zangoose,Seviper,Lunatone,Solrock,Barboach,Whiscash,Corphish,Crawdaunt,Baltoy,Claydol,Lileep,Cradily,Anorith,Armaldo,Feebas,Milotic,Castform,Kecleon,Shuppet,Banette,Duskull,Dusclops,Tropius,Chimecho,Absol,Wynaut,Snorunt,Glalie,Spheal,Sealeo,Walrein,Clamperl,Huntail,Gorebyss,Relicanth,Luvdisc,Bagon,Shelgon,Salamence,Beldum,Metang,Metagross,Regirock,Regice,Registeel,Latias,Latios,Kyogre,Groudon,Rayquaza,Jirachi,Deoxys,Turtwig,Grotle,Torterra,Chimchar,Monferno,Infernape,Piplup,Prinplup,Empoleon,Starly,Staravia,Staraptor,Bidoof,Bibarel,Kricketot,Kricketune,Shinx,Luxio,Luxray,Budew,Roserade,Cranidos,Rampardos,Shieldon,Bastiodon,Burmy,Wormadam,Mothim,Combee,Vespiquen,Pachirisu,Buizel,Floatzel,Cherubi,Cherrim,Shellos,Gastrodon,Ambipom,Drifloon,Drifblim,Buneary,Lopunny,Mismagius,Honchkrow,Glameow,Purugly,Chingling,Stunky,Skuntank,Bronzor,Bronzong,Bonsly,Mime Jr.,Happiny,Chatot,Spiritomb,Gible,Gabite,Garchomp,Munchlax,Riolu,Lucario,Hippopotas,Hippowdon,Skorupi,Drapion,Croagunk,Toxicroak,Carnivine,Finneon,Lumineon,Mantyke,Snover,Abomasnow,Weavile,Magnezone,Lickilicky,Rhyperior,Tangrowth,Electivire,Magmortar,Togekiss,Yanmega,Leafeon,Glaceon,Gliscor,Mamoswine,Porygon-Z,Gallade,Probopass,Dusknoir,Froslass,Rotom,Uxie,Mesprit,Azelf,Dialga,Palkia,Heatran,Regigigas,Giratina,Cresselia,Phione,Manaphy,Darkrai,Shaymin,Arceus,Victini,Snivy,Servine,Serperior,Tepig,Pignite,Emboar,Oshawott,Dewott,Samurott,Patrat,Watchog,Lillipup,Herdier,Stoutland,Purrloin,Liepard,Pansage,Simisage,Pansear,Simisear,Panpour,Simipour,Munna,Musharna,Pidove,Tranquill,Unfezant,Blitzle,Zebstrika,Roggenrola,Boldore,Gigalith,Woobat,Swoobat,Drilbur,Excadrill,Audino,Timburr,Gurdurr,Conkeldurr,Tympole,Palpitoad,Seismitoad,Throh,Sawk,Sewaddle,Swadloon,Leavanny,Venipede,Whirlipede,Scolipede,Cottonee,Whimsicott,Petilil,Lilligant,Basculin,Sandile,Krokorok,Krookodile,Darumaka,Darmanitan,Maractus,Dwebble,Crustle,Scraggy,Scrafty,Sigilyph,Yamask,Cofagrigus,Tirtouga,Carracosta,Archen,Archeops,Trubbish,Garbodor,Zorua,Zoroark,Minccino,Cinccino,Gothita,Gothorita,Gothitelle,Solosis,Duosion,Reuniclus,Ducklett,Swanna,Vanillite,Vanillish,Vanilluxe,Deerling,Sawsbuck,Emolga,Karrablast,Escavalier,Foongus,Amoonguss,Frillish,Jellicent,Alomomola,Joltik,Galvantula,Ferroseed,Ferrothorn,Klink,Klang,Klinklang,Tynamo,Eelektrik,Eelektross,Elgyem,Beheeyem,Litwick,Lampent,Chandelure,Axew,Fraxure,Haxorus,Cubchoo,Beartic,Cryogonal,Shelmet,Accelgor,Stunfisk,Mienfoo,Mienshao,Druddigon,Golett,Golurk,Pawniard,Bisharp,Bouffalant,Rufflet,Braviary,Vullaby,Mandibuzz,Heatmor,Durant,Deino,Zweilous,Hydreigon,Larvesta,Volcarona,Cobalion,Terrakion,Virizion,Tornadus,Thundurus,Reshiram,Zekrom,Landorus,Kyurem,Keldeo,Meloetta,Genesect,Chespin,Quilladin,Chesnaught,Fennekin,Braixen,Delphox,Froakie,Frogadier,Greninja,Bunnelby,Diggersby,Fletchling,Fletchinder,Talonflame,Scatterbug,Spewpa,Vivillon,Litleo,Pyroar,Flabébé,Floette,Florges,Skiddo,Gogoat,Pancham,Pangoro,Furfrou,Espurr,Meowstic,Honedge,Doublade,Aegislash,Spritzee,Aromatisse,Swirlix,Slurpuff,Inkay,Malamar,Binacle,Barbaracle,Skrelp,Dragalge,Clauncher,Clawitzer,Helioptile,Heliolisk,Tyrunt,Tyrantrum,Amaura,Aurorus,Sylveon,Hawlucha,Dedenne,Carbink,Goomy,Sliggoo,Goodra,Klefki,Phantump,Trevenant,Pumpkaboo,Gourgeist,Bergmite,Avalugg,Noibat,Noivern,Xerneas,Yveltal,Zygarde,Diancie,Hoopa,Volcanion,Rowlet,Dartrix,Decidueye,Litten,Torracat,Incineroar,Popplio,Brionne,Primarina,Pikipek,Trumbeak,Toucannon,Yungoos,Gumshoos,Grubbin,Charjabug,Vikavolt,Crabrawler,Crabominable,Oricorio,Cutiefly,Ribombee,Rockruff,Lycanroc,Wishiwashi,Mareanie,Toxapex,Mudbray,Mudsdale,Dewpider,Araquanid,Fomantis,Lurantis,Morelull,Shiinotic,Salandit,Salazzle,Stufful,Bewear,Bounsweet,Steenee,Tsareena,Comfey,Oranguru,Passimian,Wimpod,Golisopod,Sandygast,Palossand,Pyukumuku,Type: Null,Silvally,Minior,Komala,Turtonator,Togedemaru,Mimikyu,Bruxish,Drampa,Dhelmise,Jangmo-o,Hakamo-o,Kommo-o,Tapu Koko,Tapu Lele,Tapu Bulu,Tapu Fini,Cosmog,Cosmoem,Solgaleo,Lunala,Nihilego,Buzzwole,Pheromosa,Xurkitree,Celesteela,Kartana,Guzzlord,Necrozma,Magearna,Marshadow,Poipole,Naganadel,Stakataka,Blacephalon,Zeraora,Meltan,Melmetal,Grookey,Thwackey,Rillaboom,Scorbunny,Raboot,Cinderace,Sobble,Drizzile,Inteleon,Skwovet,Greedent,Rookidee,Corvisquire,Corviknight,Blipbug,Dottler,Orbeetle,Nickit,Thievul,Gossifleur,Eldegoss,Wooloo,Dubwool,Chewtle,Drednaw,Yamper,Boltund,Rolycoly,Carkol,Coalossal,Applin,Flapple,Appletun,Silicobra,Sandaconda,Cramorant,Arrokuda,Barraskewda,Toxel,Toxtricity,Sizzlipede,Centiskorch,Clobbopus,Grapploct,Sinistea,Polteageist,Hatenna,Hattrem,Hatterene,Impidimp,Morgrem,Grimmsnarl,Obstagoon,Perrserker,Cursola,Sirfetch’d,Mr. Rime,Runerigus,Milcery,Alcremie,Falinks,Pincurchin,Snom,Frosmoth,Stonjourner,Eiscue,Indeedee,Morpeko,Cufant,Copperajah,Dracozolt,Arctozolt,Dracovish,Arctovish,Duraludon,Dreepy,Drakloak,Dragapult,Zacian,Zamazenta,Eternatus,Kubfu,Urshifu,Zarude,Regieleki,Regidrago,Glastrier,Spectrier,Calyrex,Wyrdeer,Kleavor,Ursaluna,Basculegion,Sneasler,Overqwil,Enamorus,Sprigatito,Floragato,Meowscarada,Fuecoco,Crocalor,Skeledirge,Quaxly,Quaxwell,Quaquaval,Lechonk,Oinkologne,Tarountula,Spidops,Nymble,Lokix,Pawmi,Pawmo,Pawmot,Tandemaus,Maushold,Fidough,Dachsbun,Smoliv,Dolliv,Arboliva,Squawkabilly,Nacli,Naclstack,Garganacl,Charcadet,Armarouge,Ceruledge,Tadbulb,Bellibolt,Wattrel,Kilowattrel,Maschiff,Mabosstiff,Shroodle,Grafaiai,Bramblin,Brambleghast,Toedscool,Toedscruel,Klawf,Capsakid,Scovillain,Rellor,Rabsca,Flittle,Espathra,Tinkatink,Tinkatuff,Tinkaton,Wiglett,Wugtrio,Bombirdier,Finizen,Palafin,Varoom,Revavroom,Cyclizar,Orthworm,Glimmet,Glimmora,Greavard,Houndstone,Flamigo,Cetoddle,Cetitan,Veluza,Dondozo,Tatsugiri,Annihilape,Clodsire,Farigiraf,Dudunsparce,Kingambit,Great Tusk,Scream Tail,Brute Bonnet,Flutter Mane,Slither Wing,Sandy Shocks,Iron Treads,Iron Bundle,Iron Hands,Iron Jugulis,Iron Moth,Iron Thorns,Frigibax,Arctibax,Baxcalibur,Gimmighoul,Gholdengo,Wo-Chien,Chien-Pao,Ting-Lu,Chi-Yu,Roaring Moon,Iron Valiant,Koraidon,Miraidon,Walking Wake,Iron Leaves,Dipplin,Poltchageist,Sinistcha,Okidogi,Munkidori,Fezandipiti,Ogerpon,Archaludon,Hydrapple,Gouging Fire,Raging Bolt,Iron Boulder,Iron Crown,Terapagos,Pecharunt".split(",");
+const SP=[];
+const im=n=>(S.sprites===false||!SP.length)?'':'<img alt="" loading="lazy" src="data:image/png;base64,'+SP[n-1]+'">';
+const TY="ldldldj-j-jck-k-k-g-g-gcgdgdgdacacaca-a-acacd-d-m-m-e-e-d-d-ded-d-der-r-j-j-arardcdcldldldglglgdgde-e-a-a-k-k-b-b-j-j-k-k-kbn-n-n-b-b-b-ldldldkdkdfefefej-j-knknmimiacacack-kod-d-k-kohdhdhdfen-n-k-k-m-m-lnlne-e-b-b-a-d-d-efefa-l-a-k-k-k-k-k-knnrgconm-j-g-a-k-kckoa-a-k-m-j-a-fkfkfkfkfca-ocmcjcp-p-pcn-n-l-l-l-j-j-j-k-k-k-a-a-acacgcgcgdgddckmkmm-r-arr-rcncncm-m-m-l-krkrf-k-lclclca-l-l-gckeken-q-qcknh-n-n-ang-gia-ecier-r-kdgigfgbqoa-a-j-jfoeoekfk-k-ockcicqjqjkpe-e-a-a-a-b-b-onm-j-a-a-m-j-k-fefefqncjcnll-l-l-j-jbjbk-kekeq-q-a-a-g-g-gcg-gdklklkll-lqlqacackckcnrnrnrgkgcl-lba-a-a-gegcgha-a-a-b-b-arf-a-a-qhirifififbnbnm-m-m-m-g-g-ldd-d-kqkqk-k-jejej-n-n-a-e-epepl-lqacpca-d-fnfnkekek-kqenenflflfgfgk-k-a-a-h-h-h-h-lcn-q-n-o-o-okokokk-k-k-kfk-p-p-pcinininf-o-i-pnpnk-e-pcinn-l-l-lej-jbjbk-k-kiacacaca-akg-g-m-m-m-ldldf-f-fifig-glgcgcgcm-k-k-l-l-k-kea-hchca-a-h-qca-a-n-dqdqininf-nra-achqpepepea-b-bie-e-dgdqdbdbl-k-k-kcloloqomia-efl-m-j-rcgcl-o-ecoea-nbfih-ohmhn-n-n-ipkpjia-hpn-k-k-q-l-a-njl-l-l-j-jbjbk-k-k-a-a-a-a-a-q-q-l-l-j-j-k-k-n-n-acacacm-m-f-f-f-ncnce-eia-b-b-b-k-kekeb-b-glglglgdgdgdlrlrl-l-k-eqeqeqj-j-l-gfgfqbqbnch-h-kfkffcfcd-d-q-q-a-a-n-n-n-n-n-n-kckco-o-o-alalmcg-gildldkhkhk-gmgmlilii-i-i-m-m-m-n-n-hjhjhjp-p-p-o-o-o-g-g-emb-b-p-ehehqiqia-acacqcqcj-giqpqpqpgjgjibfblbc-mcpjpmecpokbangil-l-lbj-j-jnk-k-kqa-aeacjcjcg-g-gcjajar-r-r-l-l-b-bqa-n-n-ihihihr-r-r-r-qnqnfkfkdkdpk-k-mamafpfpfofor-bcmrfrp-p-p-irhlhlhlhlo-o-cpcpr-qcpefrnhjklclclhj-j-jqk-k-kracacaca-a-g-gmgmb-bojcgrgrf-f-k-dkdke-e-kgkgl-l-lrlrdjdjababl-l-l-r-anb-gkgkhehek-a-a-fca-jpmihrknaphlp-pbpbmrnrlrkrn-n-ninhfdgbgbm-icliqpn-irbhd-dpfijhm-i-i-l-l-l-j-j-j-k-k-k-a-a-c-c-cig-gngnq-q-l-l-a-a-k-kfm-m-f-fjfjlplplpe-e-ckk-k-mdmdjgjgb-b-h-h-n-n-nrqrqrqrqai-h-b-onehr-r-b-m-ogogf-o-namqi-i-mpmokpkoipphphphr-b-dpb-bqqlm-p-o-h-nlangfeakhbdqdrcl-l-lqj-j-jhk-k-kba-a-g-g-g-gqm-mbmba-a-r-r-lalalaacf-f-f-j-jnjhm-m-mcmcq-q-dadalhlhelelf-l-ljg-gnn-n-riririk-k-cqk-k-ididpai-fdfdh-h-cbo-o-knk-pkbhdeana-qiebrnlqhrgbmeeiokbmqcjdfmpopopoh-ihqlqoqeqjpqrbbpmpkplnlplhlhdbdndrl-iplpjpmpfnina-dh";
+const TN=["normal","fighting","flying","poison","ground","rock","bug","ghost","steel","fire","water","grass","electric","psychic","ice","dragon","dark","fairy"];
+const TC=["#A8A77A","#C22E28","#A98FF3","#A33EA1","#E2BF65","#B6A136","#A6B91A","#735797","#B7B7CE","#EE8130","#6390F0","#7AC74C","#F7D02C","#F95587","#96D9D6","#6F35FC","#705746","#D685AD"];
+const tp=n=>[TY[2*n-2],TY[2*n-1]].filter(c=>c!="-").map(c=>c.charCodeAt(0)-97);
+const tags=n=>'<span class="tags">'+tp(n).map(t=>'<span class="tag" style="--tc:'+TC[t]+'">'+TN[t]+'</span>').join("")+'</span>';
+const KEY="pokebinder_v1",$=id=>document.getElementById(id);
+let S=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!S)S={setup:false,name:"My Pokémon Binder",count:N.length,rows:3,cols:3,sides:1,owned:{},vars:{}};
+let tab=S.setup?"list":"setup",page=0,hl=0,flt="all",q="",rst=0,tfl=-1,LK={};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const nf=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
+const total=()=>Math.min(S.count,N.length),per=()=>S.rows*S.cols,pages=()=>Math.ceil(total()/per());
+const plabel=p=>S.sides==2?"Sheet "+((p>>1)+1)+(p%2?" · Back":" · Front"):"Page "+(p+1);
+const nlabel=n=>plabel(Math.floor((n-1)/per()))+" · slot "+((n-1)%per()+1);
+const ownedCount=()=>{let c=0;for(let n=1;n<=total();n++)if(S.owned[n])c++;return c};
+function head(){$("title").textContent=S.name;const o=ownedCount(),t=total();$("prog").textContent=o+"/"+t+" · "+Math.round(o/t*100)+"%"}
+function render(){head();document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t==tab));({list:vList,binder:vBinder,stats:vStats,setup:vSetup})[tab]()}
+function vList(){
+ $("main").innerHTML='<input id="q" type="search" placeholder="Search Pokémon or #" autocomplete="off" autocapitalize="off" value="'+esc(q)+'"><div class="chips">'+["all","missing","owned"].map(f=>'<button data-f="'+f+'" class="'+(flt==f?"on":"")+'">'+f+'</button>').join("")+'</div><select id="tf"><option value="-1">All types</option>'+TN.map((t,i)=>'<option value="'+i+'"'+(tfl==i?" selected":"")+'>'+t+'</option>').join("")+'</select><div id="res"></div>';
+ $("tf").onchange=e=>{tfl=+e.target.value;rows()};
+ $("q").oninput=e=>{q=e.target.value;rows()};
+ document.querySelectorAll(".chips button").forEach(b=>b.onclick=()=>{flt=b.dataset.f;vList()});
+ rows();
+}
+function rows(){
+ const k=nf(q);let a=[];
+ for(let n=1;n<=total();n++){
+  if(tfl>=0&&!tp(n).includes(tfl))continue;if(flt=="missing"&&S.owned[n])continue;if(flt=="owned"&&!S.owned[n])continue;
+  if(!k||nf(N[n-1]).includes(k)||String(n)==q.trim())a.push(n);
+ }
+ if(k)a.sort((x,y)=>(nf(N[y-1]).startsWith(k)-nf(N[x-1]).startsWith(k))||x-y);
+ $("res").innerHTML=a.length?a.map(n=>'<div class="row" data-n="'+n+'" style="border-left:4px solid '+TC[tp(n)[0]]+'">'+im(n)+'<span class="num">#'+n+'</span><b>'+N[n-1]+tags(n)+'</b><small>'+nlabel(n)+'</small><input type="checkbox" '+(S.owned[n]?"checked":"")+'></div>').join(""):'<p class="empty">No matches</p>';
+}
+function vBinder(){
+ const ps=pages();page=Math.max(0,Math.min(page,ps-1));const st=page*per();
+ let h='<div class="nav"><button data-a="-1">◀</button><div><b>'+plabel(page)+'</b><small>'+(page+1)+' of '+ps+' page sides</small></div><button data-a="1">▶</button></div><div class="grid" id="gr" style="grid-template-columns:repeat('+S.cols+',1fr)">',have=0,cnt=0;
+ for(let i=0;i<per();i++){
+  const n=st+i+1;if(n>total()){h+='<div class="tile ghost"></div>';continue}
+  cnt++;if(S.owned[n])have++;const v=(S.vars[n]||[]).length;
+  const tt=tp(n);h+='<div class="tile'+(S.owned[n]?" got":"")+(n==hl?" hl":"")+'" data-t="'+n+'" style="--c:'+TC[tt[0]]+';--c2:'+TC[tt[1]===undefined?tt[0]:tt[1]]+'"><small>#'+n+'</small>'+im(n)+'<b>'+N[n-1]+'</b>'+tags(n)+(v?'<small>'+v+' variant'+(v>1?"s":"")+'</small>':"")+'<input type="checkbox" '+(S.owned[n]?"checked":"")+'></div>';
+ }
+ const done=cnt>0&&have==cnt;$("main").innerHTML=h+'</div><p class="cnt'+(done?' ok':'')+'">'+(done?'✓ Page complete · ':'')+have+'/'+cnt+' on this page</p>';
+ if(done)$("gr").classList.add("done");const was=LK[page];LK[page]=done;if(done&&was===false)burst();
+}
+function burst(){
+ const f=document.createElement("div");f.className="fl";let h='<div class="fb">Page complete</div>';
+ for(let i=0;i<28;i++){const a=Math.random()*6.28,d=90+Math.random()*130;h+='<i style="--x:'+Math.round(Math.cos(a)*d)+'px;--y:'+Math.round(Math.sin(a)*d)+'px;background:'+TC[(Math.random()*18)|0]+';animation-delay:'+Math.round(Math.random()*120)+'ms"></i>'}
+ f.innerHTML=h;document.body.appendChild(f);setTimeout(()=>f.remove(),1800);
+ try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}
+}
+function vStats(){
+ const R=["Kanto","Johto","Hoenn","Sinnoh","Unova","Kalos","Alola","Galar","Paldea"],G=[151,251,386,493,649,721,809,905,1025];
+ const bar=(l,s,o,t)=>{const p=Math.round(o/t*100);return '<div class="gen"><div class="gh"><b>'+l+'</b><small>'+s+'</small><small>'+o+'/'+t+' · '+p+'%</small></div><div class="bar"><div class="fill'+(o==t?' full':'')+'" style="width:'+p+'%"></div></div></div>'};
+ let h='<h2>Overall</h2>'+bar('All','',ownedCount(),total()),pc=0;const ps=pages();
+ for(let p=0;p<ps;p++){let c=0,k=0;for(let i=1;i<=per();i++){const n=p*per()+i;if(n>total())break;k++;if(S.owned[n])c++}if(k&&c==k)pc++}
+ h+='<p class="sum">'+pc+' of '+ps+' page sides complete</p><h2>By generation</h2>';
+ let a=1;G.forEach((g,i)=>{const b=Math.min(g,total());if(a<=b){let o=0;for(let n=a;n<=b;n++)if(S.owned[n])o++;h+=bar('Gen '+(i+1),R[i],o,b-a+1)}a=g+1});
+ $("main").innerHTML=h;
+}
+function vSetup(){
+ const o=(v,t)=>'<option value="'+v+'"'+(S.sides==v?" selected":"")+'>'+t+'</option>';
+ $("main").innerHTML='<h2>Binder setup</h2><label>Binder name<input id="sn" value="'+esc(S.name)+'"></label><label>Projected cards (max '+N.length+')<input id="sc" type="number" inputmode="numeric" min="1" max="'+N.length+'" value="'+S.count+'"></label><div class="two"><label>Rows<input id="sr" type="number" inputmode="numeric" min="1" max="6" value="'+S.rows+'"></label><label>Columns<input id="sl" type="number" inputmode="numeric" min="1" max="6" value="'+S.cols+'"></label></div><label>Page use<select id="ss">'+o(1,"Front only")+o(2,"Front and back")+'</select></label>'+(SP.length?'<label class="own" style="margin:14px 0"><input id="sp" type="checkbox" '+(S.sprites===false?"":"checked")+'> Show sprites</label>':"")+'<p class="sum" id="sum"></p><button class="pri" id="sv">Save binder</button><h2>Backup</h2><textarea id="bk" rows="4" placeholder="Tap Export to copy your data, or paste a backup here and tap Import"></textarea><div class="two" style="margin-top:8px"><button id="ex">Export</button><button id="im">Import</button></div><button class="danger" id="rs">Reset all ticks and variants</button><p class="fine">Unofficial fan-made tracker. Not affiliated with or endorsed by Nintendo, Game Freak, Creatures or The Pokémon Company. Pokémon and its character names are trademarks of their owners.</p>';
+ const rd=()=>({c:Math.max(1,Math.min(N.length,+$("sc").value||1)),r:Math.max(1,Math.min(6,+$("sr").value||1)),l:Math.max(1,Math.min(6,+$("sl").value||1)),s:+$("ss").value});
+ const sum=()=>{const d=rd(),ps=Math.ceil(d.c/(d.r*d.l));$("sum").textContent=d.c+" cards at "+d.r*d.l+" per page side = "+ps+" page sides, so "+(d.s==2?Math.ceil(ps/2)+" sleeve sheets (front and back)":ps+" sleeve pages")+"."};
+ ["sc","sr","sl","ss"].forEach(i=>$(i).oninput=sum);sum();
+ $("sv").onclick=()=>{const d=rd();Object.assign(S,{name:$("sn").value.trim()||"My Pokémon Binder",count:d.c,rows:d.r,cols:d.l,sides:d.s,setup:true,sprites:$("sp")?$("sp").checked:false});save();tab="list";page=0;render()};
+ $("ex").onclick=()=>{$("bk").value=JSON.stringify(S);$("bk").select();try{document.execCommand("copy")}catch(e){}};
+ $("im").onclick=()=>{try{const d=JSON.parse($("bk").value);if(!d||typeof d.owned!="object")throw 0;S=d;S.setup=true;save();render()}catch(e){$("im").textContent="Invalid backup"}};
+ $("rs").onclick=()=>{if(!rst){rst=1;$("rs").textContent="Tap again to confirm reset";return}rst=0;S.owned={};S.vars={};save();render()};
+}
+function modal(n){
+ const v=S.vars[n]||[],m=$("modal");
+ m.innerHTML='<div class="sheet"><h2>'+im(n)+' #'+n+' '+N[n-1]+'</h2>'+tags(n)+'<label class="own"><input id="mo" type="checkbox" '+(S.owned[n]?"checked":"")+'> Slot filled</label><div>'+(v.map((x,i)=>'<div class="var">'+esc(x)+'<button data-d="'+i+'">✕</button></div>').join("")||'<small style="color:var(--mut)">No variants noted yet</small>')+'</div><div class="add"><input id="vi" placeholder="Add variant, e.g. Holo or Surfing"><button id="va">Add</button></div><button class="pri" id="vc">Done</button></div>';
+ m.className="open";
+ $("mo").onchange=e=>{S.owned[n]=e.target.checked?1:0;save()};
+ $("va").onclick=()=>{const t=$("vi").value.trim();if(!t)return;(S.vars[n]=S.vars[n]||[]).push(t);S.owned[n]=1;save();modal(n)};
+ m.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{S.vars[n].splice(+b.dataset.d,1);save();modal(n)});
+ $("vc").onclick=()=>{m.className="";render()};
+ m.onclick=e=>{if(e.target===m){m.className="";render()}};
+}
+$("main").onclick=e=>{
+ const t=e.target,a=t.closest("[data-a]");
+ if(a){page+=+a.dataset.a;hl=0;return vBinder()}
+ const r=t.closest(".row"),tl=t.closest(".tile[data-t]");if(!r&&!tl)return;
+ const n=+(r?r.dataset.n:tl.dataset.t);
+ if(t.type=="checkbox"){S.owned[n]=t.checked?1:0;save();head();if(tl)vBinder();return}
+ if(r){tab="binder";page=Math.floor((n-1)/per());hl=n;render();window.scrollTo(0,0)}else modal(n);
+};
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;rst=0;render()});
+render();
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script></body></html>
