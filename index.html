@@ -10,8 +10,8 @@
 :root[data-theme="dark"]{--bg:#141413;--card:#222220;--tx:#f0f0ea;--mut:#9a9a92;--bd:#38382f;--ac:#ef5a4e;--ok:#4cc27c;color-scheme:dark}
 *,*:before,*:after{box-sizing:inherit}
 html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 -apple-system,system-ui,"Segoe UI",sans-serif}
-header{padding:12px 16px 4px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
-h1{font-size:19px;margin:0}h2{font-size:16px;margin:18px 0 8px}
+header{padding:12px 16px 4px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+h1{font-size:19px;margin:0;flex:1}h2{font-size:16px;margin:18px 0 8px}
 #prog{color:var(--mut);font-size:13px;white-space:nowrap}
 main{padding:8px 16px 90px}
 nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -20,7 +20,7 @@ nav button.on{color:var(--ac)}
 input,select,textarea,button{font:inherit;color:inherit}
 input[type=search],input[type=text],input[type=number],input:not([type]),select,textarea{width:100%;padding:11px 12px;border:1px solid var(--bd);border-radius:10px;background:var(--card);font-size:16px}
 input[type=checkbox]{width:22px;height:22px;accent-color:var(--ok);flex:none}
-.chips{display:flex;gap:8px;margin:10px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
 .chips button,.pri,#ex,#im,.add button{border:1px solid var(--bd);background:var(--card);border-radius:999px;padding:7px 14px;text-transform:capitalize}
 .chips .on{background:var(--ac);color:#fff;border-color:var(--ac)}
 .pri{background:var(--ac);color:#fff;border-color:var(--ac);width:100%;padding:12px;border-radius:10px;margin-top:12px;text-transform:none}
@@ -76,11 +76,29 @@ label{display:block;margin:10px 0;font-size:13px;color:var(--mut)}label input,la
 .tile{transition:transform .1s}.tile:active{transform:scale(.97)}
 .grid.sl{animation:sl .22s ease-out}.grid.sr{animation:sr .22s ease-out}
 @keyframes sl{from{transform:translateX(40px);opacity:.3}}@keyframes sr{from{transform:translateX(-40px);opacity:.3}}
+#qa{border:0;background:var(--ac);color:#fff;width:34px;height:34px;border-radius:50%;font-size:20px;line-height:1;flex:none}
+.ghostb{background:var(--card)!important;color:var(--tx)!important;border-color:var(--bd)!important}
+.clist{display:flex;flex-direction:column;gap:8px;padding:8px;border-radius:14px}
+.clist.done{outline:2px solid var(--ok);outline-offset:6px;margin:8px 6px}
+.clist.sl{animation:sl .22s ease-out}.clist.sr{animation:sr .22s ease-out}
+.crow{display:flex;align-items:center;gap:12px;padding:10px 12px;border:2px dashed color-mix(in srgb,var(--c) 50%,transparent);border-radius:12px}
+.crow.got{border-style:solid;border-color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent)}
+.crow.hl{box-shadow:0 0 0 3px var(--ac)}
+.crow img{width:56px;height:56px;object-fit:contain;flex:none}.crow:not(.got) img{filter:grayscale(1);opacity:.45}
+.ci{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}.ci b{font-size:17px}.ci small{color:var(--mut)}.ci .tags{justify-content:flex-start}
+.ck{width:34px;height:34px;border-radius:50%;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex:none}
+.crow.got .ck{background:var(--ok);border-color:var(--ok)}.dtl{border:0;background:none;font-size:22px;color:var(--mut);padding:4px 8px}
+.pimg{width:100%;border-radius:10px;margin:8px 0}
+.qp{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;min-height:24px}
+.qc{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--card);border:1px solid var(--bd)}.qc.have{opacity:.6}.qc.bad{border-color:var(--ac);color:var(--ac)}
+.sp2{margin:0 0 10px;font-size:14px}.slist{max-height:42vh;overflow:auto}
+.bgd{display:flex;flex-wrap:wrap;gap:8px}.bg1{border:1px solid var(--bd);background:var(--card);border-radius:12px;padding:8px 12px;font-size:13px}.bg1.full{border-color:var(--ok);color:var(--ok);font-weight:600}
+.step{display:flex;align-items:center;gap:10px;margin:10px 0}.step button{width:34px;height:34px;border-radius:50%;border:1px solid var(--bd);background:var(--card);font-size:18px}
 </style><link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#d63a2f">
 </head><body>
-<header><h1 id="title"></h1><div id="prog"></div></header>
+<header><h1 id="title"></h1><div id="prog"></div><button id="qa" aria-label="Quick add">＋</button></header>
 <main id="main"></main>
 <nav><button data-t="list">List</button><button data-t="binder">Binder</button><button data-t="stats">Progress</button><button data-t="setup">Setup</button></nav>
 <div id="modal"></div><div id="toast"></div>
@@ -96,7 +114,7 @@ const tags=n=>'<span class="tags">'+tp(n).map(t=>'<span class="tag" style="--tc:
 const KEY="pokebinder_v1",$=id=>document.getElementById(id);
 let S=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S)S={setup:false,name:"My Pokémon Binder",count:N.length,rows:3,cols:3,sides:1,owned:{},vars:{}};
-S.up=S.up||{};
+S.up=S.up||{};S.dup=S.dup||{};S.log=S.log||[];S.ph=S.ph||{};
 let tab=S.setup?(S.tab||"list"):"setup",page=S.page||0,hl=0,flt="all",q="",rst=0,tfl=-1,gf=-1,LK={},U=[],pend=null,pgDone=false,dirc="",tmr;
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -109,23 +127,41 @@ function head(){$("title").textContent=S.name;const o=ownedCount(),t=total();$("
 const R=["Kanto","Johto","Hoenn","Sinnoh","Unova","Kalos","Alola","Galar","Paldea"],G=[151,251,386,493,649,721,809,905,1025],DAY=864e5;
 const genOf=n=>G.findIndex(e=>n<=e);
 function genDone(g){const a=g?G[g-1]+1:1,b=Math.min(G[g],total());if(a>b)return false;for(let n=a;n<=b;n++)if(!S.owned[n])return false;return true}
-function theme(){const r=document.documentElement;S.theme&&S.theme!="auto"?r.setAttribute("data-theme",S.theme):r.removeAttribute("data-theme")}
+function theme(){const r=document.documentElement;S.theme&&S.theme!="auto"?r.setAttribute("data-theme",S.theme):r.removeAttribute("data-theme");r.style.webkitTextSizeAdjust=r.style.textSizeAdjust=(S.ts||100)+"%"}
 function toast(m,u){const t=$("toast");t.innerHTML='<span>'+esc(m)+'</span>'+(u?'<button id="ub">Undo</button>':"");t.className="on";clearTimeout(tmr);tmr=setTimeout(()=>t.className="",5000)}
-function setOwned(n,v){
- const was=S.owned[n]?1:0;if(was==(v?1:0))return;
- U.push({n,o:was});if(U.length>30)U.shift();
- S.owned[n]=v?1:0;save();head();toast((v?"Ticked ":"Unticked ")+N[n-1],1);
+const GC=["#E24B4B","#B8860B","#1E9E6A","#4A6FD0","#6E7480","#C0508F","#E8801A","#8A3FD1","#D14B7A"];
+const BG=[["Starters",[1,4,7,152,155,158,252,255,258,387,390,393,495,498,501,650,653,656,722,725,728,810,813,816,906,909,912]],["Eevee family",[133,134,135,136,196,197,470,471,700]],["Pseudo-legendaries",[147,148,149,246,247,248,371,372,373,374,375,376,443,444,445,633,634,635,704,705,706,782,783,784,885,886,887,996,997,998]],["Legendaries",[144,145,146,150,243,244,245,249,250,377,378,379,380,381,382,383,384,480,481,482,483,484,485,486,487,488,638,639,640,641,642,643,644,645,646,716,717,718,772,773,785,786,787,788,789,790,791,792,800,888,889,890,891,892,894,895,896,897,898,905,1001,1002,1003,1004,1007,1008,1014,1015,1016,1017,1024]],["Mythicals",[151,251,385,386,489,490,491,492,493,494,647,648,649,719,720,721,801,802,807,808,809,893,1025]],["Ultra Beasts",[793,794,795,796,797,798,799,803,804,805,806]],["Paradox",[984,985,986,987,988,989,990,991,992,993,994,995,1005,1006,1009,1010,1020,1021,1022,1023]],["Babies",[172,173,174,175,236,238,239,240,298,360,406,433,438,439,440,446,447,458,848]]];
+function curGen(){for(let g=0;g<9;g++)if(Math.min(G[g],total())>=(g?G[g-1]+1:1)&&!genDone(g))return g;return 8}
+function dropLog(n){for(let i=S.log.length-1;i>=0;i--)if(S.log[i][1]==n){S.log.splice(i,1);break}}
+function undoOne(a){S.owned[a.n]=a.o;if(!a.o)dropLog(a.n)}
+function setOwned(n,v,g){
+ const was=S.owned[n]?1:0;if(was==(v?1:0))return false;
+ U.push({n,o:was,g});if(U.length>40)U.shift();
+ S.owned[n]=v?1:0;if(v){S.log.push([Date.now(),n]);if(S.log.length>600)S.log.shift()}else dropLog(n);
+ save();head();if(!g)toast((v?"Ticked ":"Unticked ")+N[n-1],1);
  try{navigator.vibrate&&navigator.vibrate(10)}catch(e){}
- if(v){const g=genOf(n);if(genDone(g))pend=R[g]+" complete!";else{const o=ownedCount();if(o%100==0)pend=o+" cards collected!"}}
+ if(v){const k=genOf(n);if(genDone(k))pend=R[k]+" complete!";else{const o=ownedCount();if(o%100==0)pend=o+" cards collected!"}}
+ return true;
 }
 function flush(){const m=pend||(pgDone?"Page complete":null);pend=null;pgDone=false;if(m)burst(m)}
 function bkAge(){return S.lastBackup?Math.floor((Date.now()-S.lastBackup)/DAY):null}
 function bkNote(){const d=bkAge();if(ownedCount()<10||(d!==null&&d<14))return"";return '<div class="note"><span>'+(d===null?"You haven’t backed up yet.":"Last backup "+d+" days ago.")+'</span><button id="bkb">Copy backup</button></div>'}
-function doBackup(){
- S.lastBackup=Date.now();save();const t=JSON.stringify(S);
+function copyText(t){
  try{navigator.clipboard&&navigator.clipboard.writeText(t)}catch(e){}
  const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,t.length);try{document.execCommand("copy")}catch(e){}ta.remove();
- toast("Backup copied. Paste it into Notes.");
+}
+function doBackup(){S.lastBackup=Date.now();save();copyText(JSON.stringify(S));toast("Backup copied. Paste it into Notes.")}
+async function shareBackup(){
+ const t=JSON.stringify(S),nm="pokemon-binder-backup-"+new Date().toISOString().slice(0,10)+".json";
+ try{const f=new File([t],nm,{type:"application/json"});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:"Pokémon binder backup"});S.lastBackup=Date.now();save();toast("Backup shared");render();return}}
+ catch(e){if(e&&e.name=="AbortError")return}
+ try{const a=document.createElement("a");a.href="data:application/json;charset=utf-8,"+encodeURIComponent(t);a.download=nm;document.body.appendChild(a);a.click();a.remove()}catch(e){}
+ doBackup();
+}
+function importJSON(txt){
+ try{const d=JSON.parse(txt);if(!d||typeof d.owned!="object")throw 0;S=d;S.setup=true;S.up=S.up||{};S.dup=S.dup||{};S.log=S.log||[];S.ph=S.ph||{};save();theme();render();toast("Backup restored")}
+ catch(e){toast("That backup couldn’t be read")}
 }
 function nextMissing(){
  const t=total(),inPage=hl&&Math.floor((hl-1)/per())==page,st=inPage?hl+1:page*per()+1;
@@ -135,13 +171,14 @@ function nextMissing(){
 function go(p,d){page=Math.max(0,Math.min(p,pages()-1));hl=0;dirc=d||"";S.page=page;save();vBinder();flush()}
 function render(){
  head();S.tab=tab;S.page=page;save();
+ const g=tab=="binder"?genOf(Math.min(page*per()+1,total())):curGen();document.documentElement.style.setProperty("--ac",GC[g<0?8:g]);
  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t==tab));
  ({list:vList,binder:vBinder,stats:vStats,setup:vSetup})[tab]();
  if(tab=="list"||tab=="binder")$("main").insertAdjacentHTML("afterbegin",bkNote());
  flush();
 }
 function vList(){
- $("main").innerHTML='<div class="stick"><input id="q" type="search" placeholder="Search Pokémon or #" autocomplete="off" autocapitalize="off" value="'+esc(q)+'"><div class="chips">'+["all","missing","owned","upgrade"].map(f=>'<button data-f="'+f+'" class="'+(flt==f?"on":"")+'">'+f+'</button>').join("")+'</div><div class="two"><select id="tf"><option value="-1">All types</option>'+TN.map((t,i)=>'<option value="'+i+'"'+(tfl==i?" selected":"")+'>'+t+'</option>').join("")+'</select><select id="gf"><option value="-1">All generations</option>'+R.map((r,i)=>'<option value="'+i+'"'+(gf==i?" selected":"")+'>Gen '+(i+1)+' · '+r+'</option>').join("")+'</select></div></div><div id="res"></div>';
+ $("main").innerHTML='<div class="stick"><input id="q" type="search" placeholder="Search Pokémon or #" autocomplete="off" autocapitalize="off" value="'+esc(q)+'"><div class="chips">'+["all","missing","owned","upgrade","extras"].map(f=>'<button data-f="'+f+'" class="'+(flt==f?"on":"")+'">'+f+'</button>').join("")+'</div><div class="two"><select id="tf"><option value="-1">All types</option>'+TN.map((t,i)=>'<option value="'+i+'"'+(tfl==i?" selected":"")+'>'+t+'</option>').join("")+'</select><select id="gf"><option value="-1">All generations</option>'+R.map((r,i)=>'<option value="'+i+'"'+(gf==i?" selected":"")+'>Gen '+(i+1)+' · '+r+'</option>').join("")+'</select></div></div><div id="res"></div>';
  $("tf").onchange=e=>{tfl=+e.target.value;rows()};$("gf").onchange=e=>{gf=+e.target.value;rows()};
  $("q").oninput=e=>{q=e.target.value;rows()};
  document.querySelectorAll(".chips button").forEach(b=>b.onclick=()=>{flt=b.dataset.f;vList()});
@@ -151,27 +188,32 @@ function rows(){
  const k=nf(q);let a=[];
  for(let n=1;n<=total();n++){
   if(tfl>=0&&!tp(n).includes(tfl))continue;if(gf>=0&&genOf(n)!=gf)continue;
-  if(flt=="missing"&&S.owned[n])continue;if(flt=="owned"&&!S.owned[n])continue;if(flt=="upgrade"&&!S.up[n])continue;
+  if(flt=="missing"&&S.owned[n])continue;if(flt=="owned"&&!S.owned[n])continue;if(flt=="upgrade"&&!S.up[n])continue;if(flt=="extras"&&!S.dup[n])continue;
   if(!k||nf(N[n-1]).includes(k)||String(n)==q.trim())a.push(n);
  }
  if(k)a.sort((x,y)=>(nf(N[y-1]).startsWith(k)-nf(N[x-1]).startsWith(k))||x-y);
- $("res").innerHTML=a.length?a.map(n=>'<div class="row" data-n="'+n+'" style="border-left:4px solid '+TC[tp(n)[0]]+'">'+im(n)+'<span class="num">#'+n+'</span><b>'+N[n-1]+(S.up[n]?' <span class="st">★</span>':'')+tags(n)+'</b><small>'+nlabel(n)+'</small><input type="checkbox" '+(S.owned[n]?"checked":"")+'></div>').join(""):'<p class="empty">No matches</p>';
+ $("res").innerHTML=a.length?a.map(n=>'<div class="row" data-n="'+n+'" style="border-left:4px solid '+TC[tp(n)[0]]+'">'+im(n)+'<span class="num">#'+n+'</span><b>'+N[n-1]+(S.up[n]?' <span class="st">★</span>':'')+(S.dup[n]?' <span class="st">⇄'+S.dup[n]+'</span>':'')+tags(n)+'</b><small>'+nlabel(n)+'</small><input type="checkbox" '+(S.owned[n]?"checked":"")+'></div>').join(""):'<p class="empty">No matches</p>';
 }
 function pstat(p){let c=0,k=0;for(let i=1;i<=per();i++){const n=p*per()+i;if(n>total())break;k++;if(S.owned[n])c++}return[c,k]}
 function vBinder(){
  const ps=pages();page=Math.max(0,Math.min(page,ps-1));const st=page*per(),[have,cnt]=pstat(page);
- const done=cnt>0&&have==cnt,pc=cnt?Math.round(have/cnt*100):0;
+ const done=cnt>0&&have==cnt,pc=cnt?Math.round(have/cnt*100):0,lv=S.view=="list";
  let opts="";for(let p=0;p<ps;p++){const[c,k]=pstat(p);opts+='<option value="'+p+'"'+(p==page?" selected":"")+'>'+plabel(p)+' · '+c+'/'+k+'</option>'}
- let h='<div class="nav"><button data-a="-1">◀</button><div><b>'+plabel(page)+'</b><small>'+(page+1)+' of '+ps+' page sides</small><div class="bar sm"><div class="fill'+(done?' full':'')+'" style="width:'+pc+'%"></div></div></div><button data-a="1">▶</button></div><div class="two jp"><button id="nm">Next missing</button><select id="pj">'+opts+'</select></div><div class="grid'+(dirc?' '+dirc:'')+'" id="gr" style="grid-template-columns:repeat('+S.cols+',1fr)">';
+ const dc={};for(let i=0;i<per();i++){const n=st+i+1;if(n>total())break;const t=tp(n)[0];dc[t]=(dc[t]||0)+1}
+ const dom=Object.keys(dc).sort((a,b)=>dc[b]-dc[a])[0],tint=dom!==undefined?'background:color-mix(in srgb,'+TC[dom]+' 10%,transparent);':'';
+ let h='<div class="nav"><button data-a="-1">◀</button><div><b>'+plabel(page)+'</b><small>'+(page+1)+' of '+ps+' page sides</small><div class="bar sm"><div class="fill'+(done?' full':'')+'" style="width:'+pc+'%"></div></div></div><button data-a="1">▶</button></div><div class="two jp"><button id="nm">Next missing</button><select id="pj">'+opts+'</select></div><div class="two jp"><button id="vw">'+(lv?"Grid view":"Checklist view")+'</button><button id="pp">'+(S.ph[page]?"Page photo":"Add page photo")+'</button></div>';
+ h+=lv?'<div class="clist'+(dirc?' '+dirc:'')+'" id="gr" style="'+tint+'">':'<div class="grid'+(dirc?' '+dirc:'')+'" id="gr" style="grid-template-columns:repeat('+S.cols+',1fr);'+tint+'padding:8px;border-radius:14px">';
  for(let i=0;i<per();i++){
-  const n=st+i+1;if(n>total()){h+='<div class="tile ghost"></div>';continue}
-  const v=(S.vars[n]||[]).length,tt=tp(n);
-  h+='<div class="tile'+(S.owned[n]?" got":"")+(n==hl?" hl":"")+'" data-t="'+n+'" style="--c:'+TC[tt[0]]+';--c2:'+TC[tt[1]===undefined?tt[0]:tt[1]]+'"><small>#'+n+(S.up[n]?' ★':'')+'</small>'+im(n)+'<b>'+N[n-1]+'</b>'+tags(n)+(v?'<small>'+v+' variant'+(v>1?'s':'')+'</small>':'')+'<input type="checkbox" '+(S.owned[n]?"checked":"")+'></div>';
+  const n=st+i+1;if(n>total()){if(!lv)h+='<div class="tile ghost"></div>';continue}
+  const v=(S.vars[n]||[]).length,tt=tp(n),o=S.owned[n],x=(S.up[n]?' ★':'')+(S.dup[n]?' ⇄'+S.dup[n]:'');
+  if(lv)h+='<div class="crow'+(o?" got":"")+(n==hl?" hl":"")+'" data-t="'+n+'" style="--c:'+TC[tt[0]]+'">'+im(n)+'<div class="ci"><small>#'+n+x+(v?' · '+v+' variant'+(v>1?'s':''):'')+'</small><b>'+N[n-1]+'</b>'+tags(n)+'</div><button class="dtl" aria-label="Details">⋯</button><span class="ck">'+(o?"✓":"")+'</span></div>';
+  else h+='<div class="tile'+(o?" got":"")+(n==hl?" hl":"")+'" data-t="'+n+'" style="--c:'+TC[tt[0]]+';--c2:'+TC[tt[1]===undefined?tt[0]:tt[1]]+'"><small>#'+n+x+'</small>'+im(n)+'<b>'+N[n-1]+'</b>'+tags(n)+(v?'<small>'+v+' variant'+(v>1?'s':'')+'</small>':'')+'<input type="checkbox" '+(o?"checked":"")+'></div>';
  }
  $("main").innerHTML=h+'</div><p class="cnt'+(done?' ok':'')+'">'+(done?'✓ Page complete · ':'')+have+'/'+cnt+' on this page</p>';
  if(done)$("gr").classList.add("done");
  const was=LK[page];LK[page]=done;if(done&&was===false)pgDone=true;
  dirc="";$("pj").onchange=e=>{page=+e.target.value;hl=0;S.page=page;save();vBinder()};
+ const hh=document.querySelector(".hl");if(hh&&hh.scrollIntoView)hh.scrollIntoView({block:"center"});
 }
 function burst(m){
  const f=document.createElement("div");f.className="fl";let h='<div class="fb">'+esc(m)+'</div>';
@@ -179,34 +221,98 @@ function burst(m){
  f.innerHTML=h;document.body.appendChild(f);setTimeout(()=>f.remove(),1800);
  try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}
 }
+const idb=()=>new Promise((res,rej)=>{const r=indexedDB.open("binder_photos",1);r.onupgradeneeded=()=>r.result.createObjectStore("p");r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+const pget=k=>idb().then(db=>new Promise(res=>{const q=db.transaction("p").objectStore("p").get(k);q.onsuccess=()=>res(q.result||null);q.onerror=()=>res(null)})).catch(()=>null);
+const pput=(k,v)=>idb().then(db=>new Promise(res=>{const t=db.transaction("p","readwrite");v==null?t.objectStore("p").delete(k):t.objectStore("p").put(v,k);t.oncomplete=()=>res(1);t.onerror=()=>res(0)})).catch(()=>0);
+function closeM(){$("modal").className="";render()}
+function sheet(h){const m=$("modal");m.innerHTML='<div class="sheet">'+h+'<button class="pri ghostb" id="vc">Close</button></div>';m.className="open";$("vc").onclick=closeM;m.onclick=e=>{if(e.target===m)closeM()}}
+function photo(){
+ const k="p"+page;
+ pget(k).then(d=>{
+  if(!d&&S.ph[page]){delete S.ph[page];save()}
+  sheet('<h2>'+plabel(page)+' photo</h2>'+(d?'<img class="pimg" src="'+d+'" alt="">':'<p class="fine">No photo yet. Take or choose one of this physical page for reference.</p>')+'<input id="pf" type="file" accept="image/*" hidden><button class="pri" id="pa">'+(d?"Replace photo":"Add photo")+'</button>'+(d?'<button class="danger" id="pr">Remove photo</button>':'')+'<p class="fine">Photos stay on this device and aren’t part of backups.</p>');
+  $("pa").onclick=()=>$("pf").click();
+  $("pf").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const z=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*z);c.height=Math.round(im.height*z);c.getContext("2d").drawImage(im,0,0,c.width,c.height);pput(k,c.toDataURL("image/jpeg",.7)).then(ok=>{if(ok){S.ph[page]=1;save();photo()}else toast("Couldn’t save the photo")})};im.src=r.result};r.readAsDataURL(f)};
+  if($("pr"))$("pr").onclick=()=>pput(k,null).then(()=>{delete S.ph[page];save();closeM()});
+ });
+}
+function parseQ(v){
+ const out=[],bad=[];let toks=v.split(/[,;\n]+/).map(x=>x.trim()).filter(Boolean);
+ if(toks.length==1&&/^\d+(\s+\d+)+$/.test(toks[0]))toks=toks[0].split(/\s+/);
+ toks.forEach(t=>{
+  let m=t.match(/^(\d+)\s*-\s*(\d+)$/);
+  if(m){for(let n=Math.max(1,+m[1]);n<=Math.min(+m[2],total());n++)out.push(n);return}
+  if(/^\d+$/.test(t)){const n=+t;n>=1&&n<=total()?out.push(n):bad.push(t+" (no such number)");return}
+  const k=nf(t);if(!k)return;const all=[];for(let n=1;n<=total();n++)all.push(n);
+  let h=all.filter(n=>nf(N[n-1])==k);if(!h.length)h=all.filter(n=>nf(N[n-1]).startsWith(k));
+  if(h.length==1)out.push(h[0]);else bad.push(t+(h.length?" ("+h.length+" matches: "+h.slice(0,3).map(n=>N[n-1]).join(", ")+")":" (no match)"));
+ });
+ return{ids:[...new Set(out)].slice(0,300),bad};
+}
+function quick(){
+ sheet('<h2>Quick add</h2><p class="fine" style="margin:0 0 8px">Type numbers or names, separated by commas. Ranges like 1-10 work too.</p><input id="qi" placeholder="25, bulbasaur, 133" autocomplete="off" autocapitalize="off" enterkeyhint="done"><div id="qp" class="qp"></div><button class="pri" id="qg">Tick</button>');
+ const upd=()=>{const r=parseQ($("qi").value),nw=r.ids.filter(n=>!S.owned[n]);$("qp").innerHTML=r.ids.slice(0,40).map(n=>'<span class="qc'+(S.owned[n]?' have':'')+'">#'+n+' '+N[n-1]+(S.owned[n]?' ✓':'')+'</span>').join("")+(r.ids.length>40?' <small>+'+(r.ids.length-40)+' more</small>':'')+r.bad.map(b=>'<span class="qc bad">'+esc(b)+'</span>').join("");$("qg").textContent=nw.length?"Tick "+nw.length+" card"+(nw.length>1?"s":""):"Nothing new to tick";return nw};
+ const go2=()=>{const nw=upd();if(!nw.length)return;const g=Date.now(),o0=ownedCount();nw.forEach(n=>setOwned(n,1,g));const o1=ownedCount();if(!pend&&Math.floor(o1/100)>Math.floor(o0/100))pend=Math.floor(o1/100)*100+" cards collected!";$("modal").className="";render();toast(nw.length==1?"Ticked "+N[nw[0]-1]:"Ticked "+nw.length+" cards",1)};
+ $("qi").oninput=upd;$("qi").onkeydown=e=>{if(e.key=="Enter")go2()};$("qg").onclick=go2;upd();setTimeout(()=>{const q=$("qi");q&&q.focus()},50);
+}
+let shopG=-1,shopU=true;
+function shop(){
+ const it=[];let c=0;
+ for(let n=1;n<=total();n++){if(shopG>=0&&genOf(n)!=shopG)continue;if(!S.owned[n]||(shopU&&S.up[n])){const p=Math.floor((n-1)/per());(it[p]=it[p]||[]).push(n);c++}}
+ let txt="",html="";const f=n=>"#"+n+" "+N[n-1]+(S.owned[n]?" (upgrade)":"");
+ it.forEach((a,p)=>{if(!a)return;txt+=plabel(p)+": "+a.map(f).join(", ")+"\n";html+='<p class="sp2"><b>'+plabel(p)+'</b><br>'+a.map(f).join(", ")+'</p>'});
+ sheet('<h2>Shopping list</h2><div class="two"><select id="sg"><option value="-1">All generations</option>'+R.map((r,i)=>'<option value="'+i+'"'+(shopG==i?" selected":"")+'>Gen '+(i+1)+' · '+r+'</option>').join("")+'</select><label class="own" style="margin:0"><input id="su" type="checkbox" '+(shopU?"checked":"")+'> Upgrades</label></div><p class="sum">'+c+' card'+(c==1?'':'s')+' to find</p><div class="slist">'+(html||'<p class="empty">Nothing to find here.</p>')+'</div><button class="pri" id="sc2">Copy as text</button>');
+ $("sg").onchange=e=>{shopG=+e.target.value;shop()};$("su").onchange=e=>{shopU=e.target.checked;shop()};
+ $("sc2").onclick=()=>{copyText("Pokémon binder shopping list\n"+txt);toast("List copied")};
+}
+function reorderWarn(oldP,newP,d,fin){
+ const mv=[],lab=(n,per,sd)=>{const p=Math.floor((n-1)/per);return(sd==2?"Sheet "+((p>>1)+1)+(p%2?" back":" front"):"Page "+(p+1))+" slot "+((n-1)%per+1)};
+ for(let n=1;n<=Math.min(total(),d.c);n++)if(lab(n,oldP,S.sides)!=lab(n,newP,d.s))mv.push(n);
+ if(!mv.length)return fin();
+ const ex=[0,Math.floor(mv.length/2),mv.length-1].map(i=>mv[i]).filter((v,i,a)=>a.indexOf(v)==i);
+ sheet('<h2>This moves cards</h2><p>'+mv.length+' of '+Math.min(total(),d.c)+' Pokémon would sit in a different spot in your binder. Your ticks stay with each Pokémon, but your physical pages would no longer match.</p><p class="sum">'+ex.map(n=>N[n-1]+' (#'+n+'): '+lab(n,oldP,S.sides)+' → '+lab(n,newP,d.s)).join('<br>')+'</p><button class="pri" id="ap">Apply change</button>');
+ $("ap").onclick=fin;
+}
 function vStats(){
- const bar=(l,s,o,t)=>{const p=Math.round(o/t*100);return '<div class="gen"><div class="gh"><b>'+l+'</b><small>'+s+'</small><small>'+o+'/'+t+' · '+p+'%</small></div><div class="bar"><div class="fill'+(o==t?' full':'')+'" style="width:'+p+'%"></div></div></div>'};
- const ps=pages();let pc=0,map='<div class="map">',vc=0,uc=0;
+ const bar=(l,s,o,t,c)=>{const p=t?Math.round(o/t*100):0;return '<div class="gen"><div class="gh"><b>'+l+'</b><small>'+s+'</small><small>'+o+'/'+t+' · '+p+'%</small></div><div class="bar"><div class="fill'+(o==t&&t?' full':'')+'" style="width:'+p+'%'+(c&&o!=t?';background:'+c:'')+'"></div></div></div>'};
+ const ps=pages();let pc=0,map='<div class="map">',vc=0,uc=0,xc=0;
  for(let p=0;p<ps;p++){const[c,k]=pstat(p),f=k?c/k:0;if(k&&c==k)pc++;map+='<i data-p="'+p+'" title="'+plabel(p)+'" style="background:'+(f==1?"var(--ok)":"color-mix(in srgb,var(--ok) "+Math.round(f*55)+"%,transparent)")+'"></i>'}
- for(let n=1;n<=total();n++){vc+=(S.vars[n]||[]).length;if(S.up[n])uc++}
- let h='<h2>Overall</h2>'+bar('All','',ownedCount(),total())+'<p class="sum">'+pc+' of '+ps+' page sides complete · '+vc+' variants noted · '+uc+' upgrades wanted</p><h2>By generation</h2>';
+ for(let n=1;n<=total();n++){vc+=(S.vars[n]||[]).length;if(S.up[n])uc++;xc+=S.dup[n]||0}
+ const now=Date.now(),day0=new Date().setHours(0,0,0,0),wk=S.log.filter(x=>x[0]>=now-7*DAY).length,td=S.log.filter(x=>x[0]>=day0).length;
+ const ds=new Set(S.log.map(x=>new Date(x[0]).toDateString()));let sk=0,dd=new Date();if(!ds.has(dd.toDateString()))dd.setDate(dd.getDate()-1);while(ds.has(dd.toDateString())){sk++;dd.setDate(dd.getDate()-1)}
+ let act=S.log.length?'<p class="sum">Today +'+td+' · This week +'+wk+' · Streak '+sk+' day'+(sk==1?'':'s')+'</p>':'<p class="sum">Activity tracking starts from your next tick.</p>';
+ if(S.log.length){const f=Math.min(...S.log.map(x=>x[0])),days=Math.min(28,Math.max(1,Math.ceil((now-f)/DAY))),r=S.log.filter(x=>x[0]>=now-28*DAY).length,rem=total()-ownedCount();
+  if(r>=5&&days>=7&&rem>0){const pd=r/days;act+='<p class="sum">About '+Math.round(pd*7*10)/10+' cards a week lately. At this pace you would finish around '+new Date(now+rem/pd*DAY).toLocaleDateString(undefined,{month:"long",year:"numeric"})+'.</p>'}}
+ let h='<h2>Overall</h2>'+bar('All','',ownedCount(),total())+'<p class="sum">'+pc+' of '+ps+' page sides complete · '+vc+' variants noted · '+uc+' upgrades wanted · '+xc+' extras to trade</p>'+act+'<h2>By generation</h2>';
  let a=1;G.forEach((g,i)=>{const b=Math.min(g,total());if(a<=b){let o=0;for(let n=a;n<=b;n++)if(S.owned[n])o++;h+=bar('Gen '+(i+1),R[i],o,b-a+1)}a=g+1});
+ h+='<h2>By type</h2>'+TN.map((t,i)=>{let o=0,k=0;for(let n=1;n<=total();n++)if(tp(n).includes(i)){k++;if(S.owned[n])o++}return k?bar(t[0].toUpperCase()+t.slice(1),'',o,k,TC[i]):''}).join("");
+ h+='<h2>Collections</h2><div class="bgd">'+BG.map(b=>{const ids=b[1].filter(n=>n<=total());if(!ids.length)return"";const o=ids.filter(n=>S.owned[n]).length,f=o==ids.length;return '<div class="bg1'+(f?' full':'')+'">'+(f?'✓ ':'')+b[0]+' '+o+'/'+ids.length+'</div>'}).join("")+'</div>';
  const d=bkAge();
- $("main").innerHTML=h+'<h2>Pages</h2>'+map+'</div><p class="fine">Tap a square to open that page. Darker green means more of the page is filled.</p><h2>Backup</h2><p class="sum">'+(d===null?"Not backed up yet.":d==0?"Backed up today.":"Last backup "+d+" day"+(d>1?"s":"")+" ago.")+'</p><button class="pri" id="bkb">Copy backup</button><p class="fine">Paste it into Notes or a message to yourself. Restore it from Setup, then Import.</p>';
+ $("main").innerHTML=h+'<h2>Pages</h2>'+map+'</div><p class="fine">Tap a square to open that page. Greener means more of the page is filled.</p><button class="pri" id="shp">Shopping list</button><h2>Backup</h2><p class="sum">'+(d===null?"Not backed up yet.":d==0?"Backed up today.":"Last backup "+d+" day"+(d>1?"s":"")+" ago.")+'</p><button class="pri" id="sbk">Save backup as file</button><button class="pri ghostb" id="bkb">Copy backup text</button><p class="fine">Restore from Setup. Page photos are not included.</p>';
 }
 function vSetup(){
  const o=(v,t)=>'<option value="'+v+'"'+(S.sides==v?" selected":"")+'>'+t+'</option>';
- $("main").innerHTML='<h2>Binder setup</h2><label>Binder name<input id="sn" value="'+esc(S.name)+'"></label><label>Projected cards (max '+N.length+')<input id="sc" type="number" inputmode="numeric" min="1" max="'+N.length+'" value="'+S.count+'"></label><div class="two"><label>Rows<input id="sr" type="number" inputmode="numeric" min="1" max="6" value="'+S.rows+'"></label><label>Columns<input id="sl" type="number" inputmode="numeric" min="1" max="6" value="'+S.cols+'"></label></div><label>Page use<select id="ss">'+o(1,"Front only")+o(2,"Front and back")+'</select></label>'+(SP.length?'<label class="own" style="margin:14px 0"><input id="sp" type="checkbox" '+(S.sprites===false?"":"checked")+'> Show sprites</label>':"")+'<label>Theme<select id="th"></select></label><p class="sum" id="sum"></p><button class="pri" id="sv">Save binder</button><h2>Backup</h2><textarea id="bk" rows="4" placeholder="Tap Export to copy your data, or paste a backup here and tap Import"></textarea><div class="two" style="margin-top:8px"><button id="ex">Export</button><button id="im">Import</button></div><button class="danger" id="rs">Reset all ticks and variants</button><p class="fine">Unofficial fan-made tracker. Not affiliated with or endorsed by Nintendo, Game Freak, Creatures or The Pokémon Company. Pokémon and its character names are trademarks of their owners.</p>';
+ $("main").innerHTML='<h2>Binder setup</h2><label>Binder name<input id="sn" value="'+esc(S.name)+'"></label><label>Projected cards (max '+N.length+')<input id="sc" type="number" inputmode="numeric" min="1" max="'+N.length+'" value="'+S.count+'"></label><div class="two"><label>Rows<input id="sr" type="number" inputmode="numeric" min="1" max="6" value="'+S.rows+'"></label><label>Columns<input id="sl" type="number" inputmode="numeric" min="1" max="6" value="'+S.cols+'"></label></div><label>Page use<select id="ss">'+o(1,"Front only")+o(2,"Front and back")+'</select></label>'+(SP.length?'<label class="own" style="margin:14px 0"><input id="sp" type="checkbox" '+(S.sprites===false?"":"checked")+'> Show sprites</label>':"")+'<div class="two"><label>Theme<select id="th"></select></label><label>Text size<select id="ts"></select></label></div><p class="sum" id="sum"></p><button class="pri" id="sv">Save binder</button><h2>Backup</h2><textarea id="bk" rows="4" placeholder="Tap Export to copy your data, or paste a backup here and tap Import"></textarea><div class="two" style="margin-top:8px"><button id="ex">Export</button><button id="im">Import</button></div><button class="pri" id="sh">Save backup as file</button><label>Restore from a backup file<input id="imf" type="file" accept=".json,application/json"></label><button class="danger" id="rs">Reset all ticks and variants</button><p class="fine">Unofficial fan-made tracker. Not affiliated with or endorsed by Nintendo, Game Freak, Creatures or The Pokémon Company. Pokémon and its character names are trademarks of their owners.</p>';
  const rd=()=>({c:Math.max(1,Math.min(N.length,+$("sc").value||1)),r:Math.max(1,Math.min(6,+$("sr").value||1)),l:Math.max(1,Math.min(6,+$("sl").value||1)),s:+$("ss").value});
  const sum=()=>{const d=rd(),ps=Math.ceil(d.c/(d.r*d.l));$("sum").textContent=d.c+" cards at "+d.r*d.l+" per page side = "+ps+" page sides, so "+(d.s==2?Math.ceil(ps/2)+" sleeve sheets (front and back)":ps+" sleeve pages")+"."};
  ["sc","sr","sl","ss"].forEach(i=>$(i).oninput=sum);sum();
  $("th").innerHTML=["auto","light","dark"].map(v=>'<option value="'+v+'"'+((S.theme||"auto")==v?" selected":"")+'>'+v[0].toUpperCase()+v.slice(1)+'</option>').join("");$("th").onchange=e=>{S.theme=e.target.value;save();theme()};
- $("sv").onclick=()=>{const d=rd();Object.assign(S,{name:$("sn").value.trim()||"My Pokémon Binder",count:d.c,rows:d.r,cols:d.l,sides:d.s,setup:true,sprites:$("sp")?$("sp").checked:false});save();tab="list";page=0;render()};
+ $("ts").innerHTML=[[100,"Normal"],[115,"Large"],[130,"Extra large"]].map(a=>'<option value="'+a[0]+'"'+((S.ts||100)==a[0]?" selected":"")+'>'+a[1]+'</option>').join("");$("ts").onchange=e=>{S.ts=+e.target.value;save();theme()};
+ $("sv").onclick=()=>{const d=rd(),nm=$("sn").value.trim()||"My Pokémon Binder",spv=$("sp")?$("sp").checked:false,oldP=per(),newP=d.r*d.l,
+  fin=()=>{const sd=S.sides;Object.assign(S,{name:nm,count:d.c,rows:d.r,cols:d.l,sides:d.s,setup:true,sprites:spv});save();tab="list";page=0;$("modal").className="";render()};
+  if(S.setup&&ownedCount()>0&&(oldP!=newP||S.sides!=d.s))reorderWarn(oldP,newP,d,fin);else fin()};
  $("ex").onclick=()=>{S.lastBackup=Date.now();save();$("bk").value=JSON.stringify(S);$("bk").select();try{document.execCommand("copy")}catch(e){}};
- $("im").onclick=()=>{try{const d=JSON.parse($("bk").value);if(!d||typeof d.owned!="object")throw 0;S=d;S.setup=true;S.up=S.up||{};save();render()}catch(e){$("im").textContent="Invalid backup"}};
- $("rs").onclick=()=>{if(!rst){rst=1;$("rs").textContent="Tap again to confirm reset";return}rst=0;S.owned={};S.vars={};S.up={};save();render()};
+ $("im").onclick=()=>importJSON($("bk").value);
+ $("rs").onclick=()=>{if(!rst){rst=1;$("rs").textContent="Tap again to confirm reset";return}rst=0;S.owned={};S.vars={};S.up={};S.dup={};S.log=[];save();render()};
+ $("sh").onclick=shareBackup;$("imf").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>importJSON(r.result);r.readAsText(f)};
 }
 function modal(n){
  const v=S.vars[n]||[],m=$("modal");
- m.innerHTML='<div class="sheet"><h2>'+im(n)+' #'+n+' '+N[n-1]+'</h2>'+tags(n)+'<label class="own"><input id="mo" type="checkbox" '+(S.owned[n]?"checked":"")+'> Slot filled</label><label class="own"><input id="mu" type="checkbox" '+(S.up[n]?"checked":"")+'> ★ Want an upgrade</label><div>'+(v.map((x,i)=>'<div class="var">'+esc(x)+'<button data-d="'+i+'">✕</button></div>').join("")||'<small style="color:var(--mut)">No variants noted yet</small>')+'</div><div class="add"><input id="vi" placeholder="Add variant, e.g. Holo or Surfing"><button id="va">Add</button></div><button class="pri" id="vc">Done</button></div>';
+ m.innerHTML='<div class="sheet"><h2>'+im(n)+' #'+n+' '+N[n-1]+'</h2>'+tags(n)+'<label class="own"><input id="mo" type="checkbox" '+(S.owned[n]?"checked":"")+'> Slot filled</label><label class="own"><input id="mu" type="checkbox" '+(S.up[n]?"checked":"")+'> ★ Want an upgrade</label><div class="step">Extras to trade <button id="dm">−</button><b id="dc">'+(S.dup[n]||0)+'</b><button id="dp">+</button></div><div>'+(v.map((x,i)=>'<div class="var">'+esc(x)+'<button data-d="'+i+'">✕</button></div>').join("")||'<small style="color:var(--mut)">No variants noted yet</small>')+'</div><div class="add"><input id="vi" placeholder="Add variant, e.g. Holo or Surfing"><button id="va">Add</button></div><button class="pri" id="vc">Done</button></div>';
  m.className="open";
  $("mo").onchange=e=>setOwned(n,e.target.checked);
  $("mu").onchange=e=>{if(e.target.checked)S.up[n]=1;else delete S.up[n];save()};
+ const dd=k=>{const c=Math.max(0,(S.dup[n]||0)+k);if(c)S.dup[n]=c;else delete S.dup[n];save();$("dc").textContent=c};$("dm").onclick=()=>dd(-1);$("dp").onclick=()=>dd(1);
  $("va").onclick=()=>{const t=$("vi").value.trim();if(!t)return;(S.vars[n]=S.vars[n]||[]).push(t);setOwned(n,1);save();modal(n)};
  m.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{S.vars[n].splice(+b.dataset.d,1);save();modal(n)});
  $("vc").onclick=()=>{m.className="";render()};
@@ -215,6 +321,9 @@ function modal(n){
 $("main").onclick=e=>{
  const t=e.target;
  if(t.id=="bkb"){doBackup();render();return}
+ if(t.id=="shp"){shop();return}if(t.id=="sbk"){shareBackup();return}if(t.id=="pp"){photo();return}
+ if(t.id=="vw"){S.view=S.view=="list"?"grid":"list";save();vBinder();return}
+ const cr=t.closest(".crow");if(cr){const n=+cr.dataset.t;if(t.closest(".dtl"))modal(n);else{setOwned(n,!S.owned[n]);vBinder();flush()}return}
  if(t.id=="nm"){if(nextMissing())render();else toast("Nothing missing. Binder complete!");return}
  const a=t.closest("[data-a]");if(a){go(page+ +a.dataset.a,+a.dataset.a>0?"sl":"sr");return}
  const mp=t.closest("[data-p]");if(mp){tab="binder";page=+mp.dataset.p;hl=0;render();window.scrollTo(0,0);return}
@@ -223,7 +332,8 @@ $("main").onclick=e=>{
  if(t.type=="checkbox"){setOwned(n,t.checked);if(tl)vBinder();flush();return}
  if(r){tab="binder";page=Math.floor((n-1)/per());hl=n;render();window.scrollTo(0,0)}else modal(n);
 };
-$("toast").onclick=e=>{if(e.target.id=="ub"){const a=U.pop();if(a){S.owned[a.n]=a.o;save();pend=null;render()}$("toast").className=""}};
+$("toast").onclick=e=>{if(e.target.id=="ub"){const a=U.pop();if(a){const g=a.g;undoOne(a);while(g&&U.length&&U[U.length-1].g==g)undoOne(U.pop());save();pend=null;render()}$("toast").className=""}};
+$("qa").onclick=quick;
 let sx=0,sy=0;
 $("main").addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
 $("main").addEventListener("touchend",e=>{if(tab!="binder"||$("modal").className)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>1.5*Math.abs(dy))go(page+(dx<0?1:-1),dx<0?"sl":"sr")},{passive:true});
