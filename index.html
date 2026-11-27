@@ -64,6 +64,18 @@ label{display:block;margin:10px 0;font-size:13px;color:var(--mut)}label input,la
 @keyframes pop{0%{transform:scale(.6);opacity:0}15%{transform:scale(1.08);opacity:1}25%{transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:translateY(-10px)}}
 @keyframes fly{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--x),var(--y)) rotate(240deg) scale(.4);opacity:0}}
 @media (prefers-reduced-motion:reduce){.fl i{display:none}}
+.stick{position:sticky;top:0;z-index:2;background:var(--bg);padding:4px 0 6px}
+.stick .two{margin-top:2px}.stick select{padding:9px 10px;font-size:15px}
+.st{color:#d9a400}.jp{margin:0 0 10px}.jp button{border:1px solid var(--bd);background:var(--card);border-radius:10px;padding:10px}
+.bar.sm{height:5px;width:130px;margin:5px auto 0}
+.map{display:flex;flex-wrap:wrap;gap:5px}.map i{display:block;width:24px;height:24px;border-radius:6px;border:1px solid var(--bd)}
+.note{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 12px;margin:0 0 8px;font-size:13px}
+.note button{border:1px solid var(--bd);background:var(--bg);border-radius:999px;padding:5px 12px}
+#toast{position:fixed;left:12px;right:12px;bottom:calc(58px + env(safe-area-inset-bottom,0px));background:var(--tx);color:var(--bg);border-radius:12px;padding:10px 14px;display:none;justify-content:space-between;align-items:center;z-index:20;font-size:14px}
+#toast.on{display:flex}#toast button{background:none;border:0;color:var(--bg);font-weight:700;text-decoration:underline}
+.tile{transition:transform .1s}.tile:active{transform:scale(.97)}
+.grid.sl{animation:sl .22s ease-out}.grid.sr{animation:sr .22s ease-out}
+@keyframes sl{from{transform:translateX(40px);opacity:.3}}@keyframes sr{from{transform:translateX(-40px);opacity:.3}}
 </style><link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#d63a2f">
@@ -71,7 +83,7 @@ label{display:block;margin:10px 0;font-size:13px;color:var(--mut)}label input,la
 <header><h1 id="title"></h1><div id="prog"></div></header>
 <main id="main"></main>
 <nav><button data-t="list">List</button><button data-t="binder">Binder</button><button data-t="stats">Progress</button><button data-t="setup">Setup</button></nav>
-<div id="modal"></div>
+<div id="modal"></div><div id="toast"></div>
 <script>
 const N="Bulbasaur,Ivysaur,Venusaur,Charmander,Charmeleon,Charizard,Squirtle,Wartortle,Blastoise,Caterpie,Metapod,Butterfree,Weedle,Kakuna,Beedrill,Pidgey,Pidgeotto,Pidgeot,Rattata,Raticate,Spearow,Fearow,Ekans,Arbok,Pikachu,Raichu,Sandshrew,Sandslash,Nidoran♀,Nidorina,Nidoqueen,Nidoran♂,Nidorino,Nidoking,Clefairy,Clefable,Vulpix,Ninetales,Jigglypuff,Wigglytuff,Zubat,Golbat,Oddish,Gloom,Vileplume,Paras,Parasect,Venonat,Venomoth,Diglett,Dugtrio,Meowth,Persian,Psyduck,Golduck,Mankey,Primeape,Growlithe,Arcanine,Poliwag,Poliwhirl,Poliwrath,Abra,Kadabra,Alakazam,Machop,Machoke,Machamp,Bellsprout,Weepinbell,Victreebel,Tentacool,Tentacruel,Geodude,Graveler,Golem,Ponyta,Rapidash,Slowpoke,Slowbro,Magnemite,Magneton,Farfetch’d,Doduo,Dodrio,Seel,Dewgong,Grimer,Muk,Shellder,Cloyster,Gastly,Haunter,Gengar,Onix,Drowzee,Hypno,Krabby,Kingler,Voltorb,Electrode,Exeggcute,Exeggutor,Cubone,Marowak,Hitmonlee,Hitmonchan,Lickitung,Koffing,Weezing,Rhyhorn,Rhydon,Chansey,Tangela,Kangaskhan,Horsea,Seadra,Goldeen,Seaking,Staryu,Starmie,Mr. Mime,Scyther,Jynx,Electabuzz,Magmar,Pinsir,Tauros,Magikarp,Gyarados,Lapras,Ditto,Eevee,Vaporeon,Jolteon,Flareon,Porygon,Omanyte,Omastar,Kabuto,Kabutops,Aerodactyl,Snorlax,Articuno,Zapdos,Moltres,Dratini,Dragonair,Dragonite,Mewtwo,Mew,Chikorita,Bayleef,Meganium,Cyndaquil,Quilava,Typhlosion,Totodile,Croconaw,Feraligatr,Sentret,Furret,Hoothoot,Noctowl,Ledyba,Ledian,Spinarak,Ariados,Crobat,Chinchou,Lanturn,Pichu,Cleffa,Igglybuff,Togepi,Togetic,Natu,Xatu,Mareep,Flaaffy,Ampharos,Bellossom,Marill,Azumarill,Sudowoodo,Politoed,Hoppip,Skiploom,Jumpluff,Aipom,Sunkern,Sunflora,Yanma,Wooper,Quagsire,Espeon,Umbreon,Murkrow,Slowking,Misdreavus,Unown,Wobbuffet,Girafarig,Pineco,Forretress,Dunsparce,Gligar,Steelix,Snubbull,Granbull,Qwilfish,Scizor,Shuckle,Heracross,Sneasel,Teddiursa,Ursaring,Slugma,Magcargo,Swinub,Piloswine,Corsola,Remoraid,Octillery,Delibird,Mantine,Skarmory,Houndour,Houndoom,Kingdra,Phanpy,Donphan,Porygon2,Stantler,Smeargle,Tyrogue,Hitmontop,Smoochum,Elekid,Magby,Miltank,Blissey,Raikou,Entei,Suicune,Larvitar,Pupitar,Tyranitar,Lugia,Ho-Oh,Celebi,Treecko,Grovyle,Sceptile,Torchic,Combusken,Blaziken,Mudkip,Marshtomp,Swampert,Poochyena,Mightyena,Zigzagoon,Linoone,Wurmple,Silcoon,Beautifly,Cascoon,Dustox,Lotad,Lombre,Ludicolo,Seedot,Nuzleaf,Shiftry,Taillow,Swellow,Wingull,Pelipper,Ralts,Kirlia,Gardevoir,Surskit,Masquerain,Shroomish,Breloom,Slakoth,Vigoroth,Slaking,Nincada,Ninjask,Shedinja,Whismur,Loudred,Exploud,Makuhita,Hariyama,Azurill,Nosepass,Skitty,Delcatty,Sableye,Mawile,Aron,Lairon,Aggron,Meditite,Medicham,Electrike,Manectric,Plusle,Minun,Volbeat,Illumise,Roselia,Gulpin,Swalot,Carvanha,Sharpedo,Wailmer,Wailord,Numel,Camerupt,Torkoal,Spoink,Grumpig,Spinda,Trapinch,Vibrava,Flygon,Cacnea,Cacturne,Swablu,Altaria,Zangoose,Seviper,Lunatone,Solrock,Barboach,Whiscash,Corphish,Crawdaunt,Baltoy,Claydol,Lileep,Cradily,Anorith,Armaldo,Feebas,Milotic,Castform,Kecleon,Shuppet,Banette,Duskull,Dusclops,Tropius,Chimecho,Absol,Wynaut,Snorunt,Glalie,Spheal,Sealeo,Walrein,Clamperl,Huntail,Gorebyss,Relicanth,Luvdisc,Bagon,Shelgon,Salamence,Beldum,Metang,Metagross,Regirock,Regice,Registeel,Latias,Latios,Kyogre,Groudon,Rayquaza,Jirachi,Deoxys,Turtwig,Grotle,Torterra,Chimchar,Monferno,Infernape,Piplup,Prinplup,Empoleon,Starly,Staravia,Staraptor,Bidoof,Bibarel,Kricketot,Kricketune,Shinx,Luxio,Luxray,Budew,Roserade,Cranidos,Rampardos,Shieldon,Bastiodon,Burmy,Wormadam,Mothim,Combee,Vespiquen,Pachirisu,Buizel,Floatzel,Cherubi,Cherrim,Shellos,Gastrodon,Ambipom,Drifloon,Drifblim,Buneary,Lopunny,Mismagius,Honchkrow,Glameow,Purugly,Chingling,Stunky,Skuntank,Bronzor,Bronzong,Bonsly,Mime Jr.,Happiny,Chatot,Spiritomb,Gible,Gabite,Garchomp,Munchlax,Riolu,Lucario,Hippopotas,Hippowdon,Skorupi,Drapion,Croagunk,Toxicroak,Carnivine,Finneon,Lumineon,Mantyke,Snover,Abomasnow,Weavile,Magnezone,Lickilicky,Rhyperior,Tangrowth,Electivire,Magmortar,Togekiss,Yanmega,Leafeon,Glaceon,Gliscor,Mamoswine,Porygon-Z,Gallade,Probopass,Dusknoir,Froslass,Rotom,Uxie,Mesprit,Azelf,Dialga,Palkia,Heatran,Regigigas,Giratina,Cresselia,Phione,Manaphy,Darkrai,Shaymin,Arceus,Victini,Snivy,Servine,Serperior,Tepig,Pignite,Emboar,Oshawott,Dewott,Samurott,Patrat,Watchog,Lillipup,Herdier,Stoutland,Purrloin,Liepard,Pansage,Simisage,Pansear,Simisear,Panpour,Simipour,Munna,Musharna,Pidove,Tranquill,Unfezant,Blitzle,Zebstrika,Roggenrola,Boldore,Gigalith,Woobat,Swoobat,Drilbur,Excadrill,Audino,Timburr,Gurdurr,Conkeldurr,Tympole,Palpitoad,Seismitoad,Throh,Sawk,Sewaddle,Swadloon,Leavanny,Venipede,Whirlipede,Scolipede,Cottonee,Whimsicott,Petilil,Lilligant,Basculin,Sandile,Krokorok,Krookodile,Darumaka,Darmanitan,Maractus,Dwebble,Crustle,Scraggy,Scrafty,Sigilyph,Yamask,Cofagrigus,Tirtouga,Carracosta,Archen,Archeops,Trubbish,Garbodor,Zorua,Zoroark,Minccino,Cinccino,Gothita,Gothorita,Gothitelle,Solosis,Duosion,Reuniclus,Ducklett,Swanna,Vanillite,Vanillish,Vanilluxe,Deerling,Sawsbuck,Emolga,Karrablast,Escavalier,Foongus,Amoonguss,Frillish,Jellicent,Alomomola,Joltik,Galvantula,Ferroseed,Ferrothorn,Klink,Klang,Klinklang,Tynamo,Eelektrik,Eelektross,Elgyem,Beheeyem,Litwick,Lampent,Chandelure,Axew,Fraxure,Haxorus,Cubchoo,Beartic,Cryogonal,Shelmet,Accelgor,Stunfisk,Mienfoo,Mienshao,Druddigon,Golett,Golurk,Pawniard,Bisharp,Bouffalant,Rufflet,Braviary,Vullaby,Mandibuzz,Heatmor,Durant,Deino,Zweilous,Hydreigon,Larvesta,Volcarona,Cobalion,Terrakion,Virizion,Tornadus,Thundurus,Reshiram,Zekrom,Landorus,Kyurem,Keldeo,Meloetta,Genesect,Chespin,Quilladin,Chesnaught,Fennekin,Braixen,Delphox,Froakie,Frogadier,Greninja,Bunnelby,Diggersby,Fletchling,Fletchinder,Talonflame,Scatterbug,Spewpa,Vivillon,Litleo,Pyroar,Flabébé,Floette,Florges,Skiddo,Gogoat,Pancham,Pangoro,Furfrou,Espurr,Meowstic,Honedge,Doublade,Aegislash,Spritzee,Aromatisse,Swirlix,Slurpuff,Inkay,Malamar,Binacle,Barbaracle,Skrelp,Dragalge,Clauncher,Clawitzer,Helioptile,Heliolisk,Tyrunt,Tyrantrum,Amaura,Aurorus,Sylveon,Hawlucha,Dedenne,Carbink,Goomy,Sliggoo,Goodra,Klefki,Phantump,Trevenant,Pumpkaboo,Gourgeist,Bergmite,Avalugg,Noibat,Noivern,Xerneas,Yveltal,Zygarde,Diancie,Hoopa,Volcanion,Rowlet,Dartrix,Decidueye,Litten,Torracat,Incineroar,Popplio,Brionne,Primarina,Pikipek,Trumbeak,Toucannon,Yungoos,Gumshoos,Grubbin,Charjabug,Vikavolt,Crabrawler,Crabominable,Oricorio,Cutiefly,Ribombee,Rockruff,Lycanroc,Wishiwashi,Mareanie,Toxapex,Mudbray,Mudsdale,Dewpider,Araquanid,Fomantis,Lurantis,Morelull,Shiinotic,Salandit,Salazzle,Stufful,Bewear,Bounsweet,Steenee,Tsareena,Comfey,Oranguru,Passimian,Wimpod,Golisopod,Sandygast,Palossand,Pyukumuku,Type: Null,Silvally,Minior,Komala,Turtonator,Togedemaru,Mimikyu,Bruxish,Drampa,Dhelmise,Jangmo-o,Hakamo-o,Kommo-o,Tapu Koko,Tapu Lele,Tapu Bulu,Tapu Fini,Cosmog,Cosmoem,Solgaleo,Lunala,Nihilego,Buzzwole,Pheromosa,Xurkitree,Celesteela,Kartana,Guzzlord,Necrozma,Magearna,Marshadow,Poipole,Naganadel,Stakataka,Blacephalon,Zeraora,Meltan,Melmetal,Grookey,Thwackey,Rillaboom,Scorbunny,Raboot,Cinderace,Sobble,Drizzile,Inteleon,Skwovet,Greedent,Rookidee,Corvisquire,Corviknight,Blipbug,Dottler,Orbeetle,Nickit,Thievul,Gossifleur,Eldegoss,Wooloo,Dubwool,Chewtle,Drednaw,Yamper,Boltund,Rolycoly,Carkol,Coalossal,Applin,Flapple,Appletun,Silicobra,Sandaconda,Cramorant,Arrokuda,Barraskewda,Toxel,Toxtricity,Sizzlipede,Centiskorch,Clobbopus,Grapploct,Sinistea,Polteageist,Hatenna,Hattrem,Hatterene,Impidimp,Morgrem,Grimmsnarl,Obstagoon,Perrserker,Cursola,Sirfetch’d,Mr. Rime,Runerigus,Milcery,Alcremie,Falinks,Pincurchin,Snom,Frosmoth,Stonjourner,Eiscue,Indeedee,Morpeko,Cufant,Copperajah,Dracozolt,Arctozolt,Dracovish,Arctovish,Duraludon,Dreepy,Drakloak,Dragapult,Zacian,Zamazenta,Eternatus,Kubfu,Urshifu,Zarude,Regieleki,Regidrago,Glastrier,Spectrier,Calyrex,Wyrdeer,Kleavor,Ursaluna,Basculegion,Sneasler,Overqwil,Enamorus,Sprigatito,Floragato,Meowscarada,Fuecoco,Crocalor,Skeledirge,Quaxly,Quaxwell,Quaquaval,Lechonk,Oinkologne,Tarountula,Spidops,Nymble,Lokix,Pawmi,Pawmo,Pawmot,Tandemaus,Maushold,Fidough,Dachsbun,Smoliv,Dolliv,Arboliva,Squawkabilly,Nacli,Naclstack,Garganacl,Charcadet,Armarouge,Ceruledge,Tadbulb,Bellibolt,Wattrel,Kilowattrel,Maschiff,Mabosstiff,Shroodle,Grafaiai,Bramblin,Brambleghast,Toedscool,Toedscruel,Klawf,Capsakid,Scovillain,Rellor,Rabsca,Flittle,Espathra,Tinkatink,Tinkatuff,Tinkaton,Wiglett,Wugtrio,Bombirdier,Finizen,Palafin,Varoom,Revavroom,Cyclizar,Orthworm,Glimmet,Glimmora,Greavard,Houndstone,Flamigo,Cetoddle,Cetitan,Veluza,Dondozo,Tatsugiri,Annihilape,Clodsire,Farigiraf,Dudunsparce,Kingambit,Great Tusk,Scream Tail,Brute Bonnet,Flutter Mane,Slither Wing,Sandy Shocks,Iron Treads,Iron Bundle,Iron Hands,Iron Jugulis,Iron Moth,Iron Thorns,Frigibax,Arctibax,Baxcalibur,Gimmighoul,Gholdengo,Wo-Chien,Chien-Pao,Ting-Lu,Chi-Yu,Roaring Moon,Iron Valiant,Koraidon,Miraidon,Walking Wake,Iron Leaves,Dipplin,Poltchageist,Sinistcha,Okidogi,Munkidori,Fezandipiti,Ogerpon,Archaludon,Hydrapple,Gouging Fire,Raging Bolt,Iron Boulder,Iron Crown,Terapagos,Pecharunt".split(",");
 const SP=[];
@@ -84,7 +96,8 @@ const tags=n=>'<span class="tags">'+tp(n).map(t=>'<span class="tag" style="--tc:
 const KEY="pokebinder_v1",$=id=>document.getElementById(id);
 let S=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S)S={setup:false,name:"My Pokémon Binder",count:N.length,rows:3,cols:3,sides:1,owned:{},vars:{}};
-let tab=S.setup?"list":"setup",page=0,hl=0,flt="all",q="",rst=0,tfl=-1,LK={};
+S.up=S.up||{};
+let tab=S.setup?(S.tab||"list"):"setup",page=S.page||0,hl=0,flt="all",q="",rst=0,tfl=-1,gf=-1,LK={},U=[],pend=null,pgDone=false,dirc="",tmr;
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const nf=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
@@ -93,10 +106,43 @@ const plabel=p=>S.sides==2?"Sheet "+((p>>1)+1)+(p%2?" · Back":" · Front"):"Pag
 const nlabel=n=>plabel(Math.floor((n-1)/per()))+" · slot "+((n-1)%per()+1);
 const ownedCount=()=>{let c=0;for(let n=1;n<=total();n++)if(S.owned[n])c++;return c};
 function head(){$("title").textContent=S.name;const o=ownedCount(),t=total();$("prog").textContent=o+"/"+t+" · "+Math.round(o/t*100)+"%"}
-function render(){head();document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t==tab));({list:vList,binder:vBinder,stats:vStats,setup:vSetup})[tab]()}
+const R=["Kanto","Johto","Hoenn","Sinnoh","Unova","Kalos","Alola","Galar","Paldea"],G=[151,251,386,493,649,721,809,905,1025],DAY=864e5;
+const genOf=n=>G.findIndex(e=>n<=e);
+function genDone(g){const a=g?G[g-1]+1:1,b=Math.min(G[g],total());if(a>b)return false;for(let n=a;n<=b;n++)if(!S.owned[n])return false;return true}
+function theme(){const r=document.documentElement;S.theme&&S.theme!="auto"?r.setAttribute("data-theme",S.theme):r.removeAttribute("data-theme")}
+function toast(m,u){const t=$("toast");t.innerHTML='<span>'+esc(m)+'</span>'+(u?'<button id="ub">Undo</button>':"");t.className="on";clearTimeout(tmr);tmr=setTimeout(()=>t.className="",5000)}
+function setOwned(n,v){
+ const was=S.owned[n]?1:0;if(was==(v?1:0))return;
+ U.push({n,o:was});if(U.length>30)U.shift();
+ S.owned[n]=v?1:0;save();head();toast((v?"Ticked ":"Unticked ")+N[n-1],1);
+ try{navigator.vibrate&&navigator.vibrate(10)}catch(e){}
+ if(v){const g=genOf(n);if(genDone(g))pend=R[g]+" complete!";else{const o=ownedCount();if(o%100==0)pend=o+" cards collected!"}}
+}
+function flush(){const m=pend||(pgDone?"Page complete":null);pend=null;pgDone=false;if(m)burst(m)}
+function bkAge(){return S.lastBackup?Math.floor((Date.now()-S.lastBackup)/DAY):null}
+function bkNote(){const d=bkAge();if(ownedCount()<10||(d!==null&&d<14))return"";return '<div class="note"><span>'+(d===null?"You haven’t backed up yet.":"Last backup "+d+" days ago.")+'</span><button id="bkb">Copy backup</button></div>'}
+function doBackup(){
+ S.lastBackup=Date.now();save();const t=JSON.stringify(S);
+ try{navigator.clipboard&&navigator.clipboard.writeText(t)}catch(e){}
+ const ta=document.createElement("textarea");ta.value=t;document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,t.length);try{document.execCommand("copy")}catch(e){}ta.remove();
+ toast("Backup copied. Paste it into Notes.");
+}
+function nextMissing(){
+ const t=total(),inPage=hl&&Math.floor((hl-1)/per())==page,st=inPage?hl+1:page*per()+1;
+ for(let k=0;k<t;k++){const n=((st-1+k)%t)+1;if(!S.owned[n]){page=Math.floor((n-1)/per());hl=n;return true}}
+ return false;
+}
+function go(p,d){page=Math.max(0,Math.min(p,pages()-1));hl=0;dirc=d||"";S.page=page;save();vBinder();flush()}
+function render(){
+ head();S.tab=tab;S.page=page;save();
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.t==tab));
+ ({list:vList,binder:vBinder,stats:vStats,setup:vSetup})[tab]();
+ if(tab=="list"||tab=="binder")$("main").insertAdjacentHTML("afterbegin",bkNote());
+ flush();
+}
 function vList(){
- $("main").innerHTML='<input id="q" type="search" placeholder="Search Pokémon or #" autocomplete="off" autocapitalize="off" value="'+esc(q)+'"><div class="chips">'+["all","missing","owned"].map(f=>'<button data-f="'+f+'" class="'+(flt==f?"on":"")+'">'+f+'</button>').join("")+'</div><select id="tf"><option value="-1">All types</option>'+TN.map((t,i)=>'<option value="'+i+'"'+(tfl==i?" selected":"")+'>'+t+'</option>').join("")+'</select><div id="res"></div>';
- $("tf").onchange=e=>{tfl=+e.target.value;rows()};
+ $("main").innerHTML='<div class="stick"><input id="q" type="search" placeholder="Search Pokémon or #" autocomplete="off" autocapitalize="off" value="'+esc(q)+'"><div class="chips">'+["all","missing","owned","upgrade"].map(f=>'<button data-f="'+f+'" class="'+(flt==f?"on":"")+'">'+f+'</button>').join("")+'</div><div class="two"><select id="tf"><option value="-1">All types</option>'+TN.map((t,i)=>'<option value="'+i+'"'+(tfl==i?" selected":"")+'>'+t+'</option>').join("")+'</select><select id="gf"><option value="-1">All generations</option>'+R.map((r,i)=>'<option value="'+i+'"'+(gf==i?" selected":"")+'>Gen '+(i+1)+' · '+r+'</option>').join("")+'</select></div></div><div id="res"></div>';
+ $("tf").onchange=e=>{tfl=+e.target.value;rows()};$("gf").onchange=e=>{gf=+e.target.value;rows()};
  $("q").oninput=e=>{q=e.target.value;rows()};
  document.querySelectorAll(".chips button").forEach(b=>b.onclick=()=>{flt=b.dataset.f;vList()});
  rows();
@@ -104,68 +150,84 @@ function vList(){
 function rows(){
  const k=nf(q);let a=[];
  for(let n=1;n<=total();n++){
-  if(tfl>=0&&!tp(n).includes(tfl))continue;if(flt=="missing"&&S.owned[n])continue;if(flt=="owned"&&!S.owned[n])continue;
+  if(tfl>=0&&!tp(n).includes(tfl))continue;if(gf>=0&&genOf(n)!=gf)continue;
+  if(flt=="missing"&&S.owned[n])continue;if(flt=="owned"&&!S.owned[n])continue;if(flt=="upgrade"&&!S.up[n])continue;
   if(!k||nf(N[n-1]).includes(k)||String(n)==q.trim())a.push(n);
  }
  if(k)a.sort((x,y)=>(nf(N[y-1]).startsWith(k)-nf(N[x-1]).startsWith(k))||x-y);
- $("res").innerHTML=a.length?a.map(n=>'<div class="row" data-n="'+n+'" style="border-left:4px solid '+TC[tp(n)[0]]+'">'+im(n)+'<span class="num">#'+n+'</span><b>'+N[n-1]+tags(n)+'</b><small>'+nlabel(n)+'</small><input type="checkbox" '+(S.owned[n]?"checked":"")+'></div>').join(""):'<p class="empty">No matches</p>';
+ $("res").innerHTML=a.length?a.map(n=>'<div class="row" data-n="'+n+'" style="border-left:4px solid '+TC[tp(n)[0]]+'">'+im(n)+'<span class="num">#'+n+'</span><b>'+N[n-1]+(S.up[n]?' <span class="st">★</span>':'')+tags(n)+'</b><small>'+nlabel(n)+'</small><input type="checkbox" '+(S.owned[n]?"checked":"")+'></div>').join(""):'<p class="empty">No matches</p>';
 }
+function pstat(p){let c=0,k=0;for(let i=1;i<=per();i++){const n=p*per()+i;if(n>total())break;k++;if(S.owned[n])c++}return[c,k]}
 function vBinder(){
- const ps=pages();page=Math.max(0,Math.min(page,ps-1));const st=page*per();
- let h='<div class="nav"><button data-a="-1">◀</button><div><b>'+plabel(page)+'</b><small>'+(page+1)+' of '+ps+' page sides</small></div><button data-a="1">▶</button></div><div class="grid" id="gr" style="grid-template-columns:repeat('+S.cols+',1fr)">',have=0,cnt=0;
+ const ps=pages();page=Math.max(0,Math.min(page,ps-1));const st=page*per(),[have,cnt]=pstat(page);
+ const done=cnt>0&&have==cnt,pc=cnt?Math.round(have/cnt*100):0;
+ let opts="";for(let p=0;p<ps;p++){const[c,k]=pstat(p);opts+='<option value="'+p+'"'+(p==page?" selected":"")+'>'+plabel(p)+' · '+c+'/'+k+'</option>'}
+ let h='<div class="nav"><button data-a="-1">◀</button><div><b>'+plabel(page)+'</b><small>'+(page+1)+' of '+ps+' page sides</small><div class="bar sm"><div class="fill'+(done?' full':'')+'" style="width:'+pc+'%"></div></div></div><button data-a="1">▶</button></div><div class="two jp"><button id="nm">Next missing</button><select id="pj">'+opts+'</select></div><div class="grid'+(dirc?' '+dirc:'')+'" id="gr" style="grid-template-columns:repeat('+S.cols+',1fr)">';
  for(let i=0;i<per();i++){
   const n=st+i+1;if(n>total()){h+='<div class="tile ghost"></div>';continue}
-  cnt++;if(S.owned[n])have++;const v=(S.vars[n]||[]).length;
-  const tt=tp(n);h+='<div class="tile'+(S.owned[n]?" got":"")+(n==hl?" hl":"")+'" data-t="'+n+'" style="--c:'+TC[tt[0]]+';--c2:'+TC[tt[1]===undefined?tt[0]:tt[1]]+'"><small>#'+n+'</small>'+im(n)+'<b>'+N[n-1]+'</b>'+tags(n)+(v?'<small>'+v+' variant'+(v>1?"s":"")+'</small>':"")+'<input type="checkbox" '+(S.owned[n]?"checked":"")+'></div>';
+  const v=(S.vars[n]||[]).length,tt=tp(n);
+  h+='<div class="tile'+(S.owned[n]?" got":"")+(n==hl?" hl":"")+'" data-t="'+n+'" style="--c:'+TC[tt[0]]+';--c2:'+TC[tt[1]===undefined?tt[0]:tt[1]]+'"><small>#'+n+(S.up[n]?' ★':'')+'</small>'+im(n)+'<b>'+N[n-1]+'</b>'+tags(n)+(v?'<small>'+v+' variant'+(v>1?'s':'')+'</small>':'')+'<input type="checkbox" '+(S.owned[n]?"checked":"")+'></div>';
  }
- const done=cnt>0&&have==cnt;$("main").innerHTML=h+'</div><p class="cnt'+(done?' ok':'')+'">'+(done?'✓ Page complete · ':'')+have+'/'+cnt+' on this page</p>';
- if(done)$("gr").classList.add("done");const was=LK[page];LK[page]=done;if(done&&was===false)burst();
+ $("main").innerHTML=h+'</div><p class="cnt'+(done?' ok':'')+'">'+(done?'✓ Page complete · ':'')+have+'/'+cnt+' on this page</p>';
+ if(done)$("gr").classList.add("done");
+ const was=LK[page];LK[page]=done;if(done&&was===false)pgDone=true;
+ dirc="";$("pj").onchange=e=>{page=+e.target.value;hl=0;S.page=page;save();vBinder()};
 }
-function burst(){
- const f=document.createElement("div");f.className="fl";let h='<div class="fb">Page complete</div>';
+function burst(m){
+ const f=document.createElement("div");f.className="fl";let h='<div class="fb">'+esc(m)+'</div>';
  for(let i=0;i<28;i++){const a=Math.random()*6.28,d=90+Math.random()*130;h+='<i style="--x:'+Math.round(Math.cos(a)*d)+'px;--y:'+Math.round(Math.sin(a)*d)+'px;background:'+TC[(Math.random()*18)|0]+';animation-delay:'+Math.round(Math.random()*120)+'ms"></i>'}
  f.innerHTML=h;document.body.appendChild(f);setTimeout(()=>f.remove(),1800);
  try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}
 }
 function vStats(){
- const R=["Kanto","Johto","Hoenn","Sinnoh","Unova","Kalos","Alola","Galar","Paldea"],G=[151,251,386,493,649,721,809,905,1025];
  const bar=(l,s,o,t)=>{const p=Math.round(o/t*100);return '<div class="gen"><div class="gh"><b>'+l+'</b><small>'+s+'</small><small>'+o+'/'+t+' · '+p+'%</small></div><div class="bar"><div class="fill'+(o==t?' full':'')+'" style="width:'+p+'%"></div></div></div>'};
- let h='<h2>Overall</h2>'+bar('All','',ownedCount(),total()),pc=0;const ps=pages();
- for(let p=0;p<ps;p++){let c=0,k=0;for(let i=1;i<=per();i++){const n=p*per()+i;if(n>total())break;k++;if(S.owned[n])c++}if(k&&c==k)pc++}
- h+='<p class="sum">'+pc+' of '+ps+' page sides complete</p><h2>By generation</h2>';
+ const ps=pages();let pc=0,map='<div class="map">',vc=0,uc=0;
+ for(let p=0;p<ps;p++){const[c,k]=pstat(p),f=k?c/k:0;if(k&&c==k)pc++;map+='<i data-p="'+p+'" title="'+plabel(p)+'" style="background:'+(f==1?"var(--ok)":"color-mix(in srgb,var(--ok) "+Math.round(f*55)+"%,transparent)")+'"></i>'}
+ for(let n=1;n<=total();n++){vc+=(S.vars[n]||[]).length;if(S.up[n])uc++}
+ let h='<h2>Overall</h2>'+bar('All','',ownedCount(),total())+'<p class="sum">'+pc+' of '+ps+' page sides complete · '+vc+' variants noted · '+uc+' upgrades wanted</p><h2>By generation</h2>';
  let a=1;G.forEach((g,i)=>{const b=Math.min(g,total());if(a<=b){let o=0;for(let n=a;n<=b;n++)if(S.owned[n])o++;h+=bar('Gen '+(i+1),R[i],o,b-a+1)}a=g+1});
- $("main").innerHTML=h;
+ const d=bkAge();
+ $("main").innerHTML=h+'<h2>Pages</h2>'+map+'</div><p class="fine">Tap a square to open that page. Darker green means more of the page is filled.</p><h2>Backup</h2><p class="sum">'+(d===null?"Not backed up yet.":d==0?"Backed up today.":"Last backup "+d+" day"+(d>1?"s":"")+" ago.")+'</p><button class="pri" id="bkb">Copy backup</button><p class="fine">Paste it into Notes or a message to yourself. Restore it from Setup, then Import.</p>';
 }
 function vSetup(){
  const o=(v,t)=>'<option value="'+v+'"'+(S.sides==v?" selected":"")+'>'+t+'</option>';
- $("main").innerHTML='<h2>Binder setup</h2><label>Binder name<input id="sn" value="'+esc(S.name)+'"></label><label>Projected cards (max '+N.length+')<input id="sc" type="number" inputmode="numeric" min="1" max="'+N.length+'" value="'+S.count+'"></label><div class="two"><label>Rows<input id="sr" type="number" inputmode="numeric" min="1" max="6" value="'+S.rows+'"></label><label>Columns<input id="sl" type="number" inputmode="numeric" min="1" max="6" value="'+S.cols+'"></label></div><label>Page use<select id="ss">'+o(1,"Front only")+o(2,"Front and back")+'</select></label>'+(SP.length?'<label class="own" style="margin:14px 0"><input id="sp" type="checkbox" '+(S.sprites===false?"":"checked")+'> Show sprites</label>':"")+'<p class="sum" id="sum"></p><button class="pri" id="sv">Save binder</button><h2>Backup</h2><textarea id="bk" rows="4" placeholder="Tap Export to copy your data, or paste a backup here and tap Import"></textarea><div class="two" style="margin-top:8px"><button id="ex">Export</button><button id="im">Import</button></div><button class="danger" id="rs">Reset all ticks and variants</button><p class="fine">Unofficial fan-made tracker. Not affiliated with or endorsed by Nintendo, Game Freak, Creatures or The Pokémon Company. Pokémon and its character names are trademarks of their owners.</p>';
+ $("main").innerHTML='<h2>Binder setup</h2><label>Binder name<input id="sn" value="'+esc(S.name)+'"></label><label>Projected cards (max '+N.length+')<input id="sc" type="number" inputmode="numeric" min="1" max="'+N.length+'" value="'+S.count+'"></label><div class="two"><label>Rows<input id="sr" type="number" inputmode="numeric" min="1" max="6" value="'+S.rows+'"></label><label>Columns<input id="sl" type="number" inputmode="numeric" min="1" max="6" value="'+S.cols+'"></label></div><label>Page use<select id="ss">'+o(1,"Front only")+o(2,"Front and back")+'</select></label>'+(SP.length?'<label class="own" style="margin:14px 0"><input id="sp" type="checkbox" '+(S.sprites===false?"":"checked")+'> Show sprites</label>':"")+'<label>Theme<select id="th"></select></label><p class="sum" id="sum"></p><button class="pri" id="sv">Save binder</button><h2>Backup</h2><textarea id="bk" rows="4" placeholder="Tap Export to copy your data, or paste a backup here and tap Import"></textarea><div class="two" style="margin-top:8px"><button id="ex">Export</button><button id="im">Import</button></div><button class="danger" id="rs">Reset all ticks and variants</button><p class="fine">Unofficial fan-made tracker. Not affiliated with or endorsed by Nintendo, Game Freak, Creatures or The Pokémon Company. Pokémon and its character names are trademarks of their owners.</p>';
  const rd=()=>({c:Math.max(1,Math.min(N.length,+$("sc").value||1)),r:Math.max(1,Math.min(6,+$("sr").value||1)),l:Math.max(1,Math.min(6,+$("sl").value||1)),s:+$("ss").value});
  const sum=()=>{const d=rd(),ps=Math.ceil(d.c/(d.r*d.l));$("sum").textContent=d.c+" cards at "+d.r*d.l+" per page side = "+ps+" page sides, so "+(d.s==2?Math.ceil(ps/2)+" sleeve sheets (front and back)":ps+" sleeve pages")+"."};
  ["sc","sr","sl","ss"].forEach(i=>$(i).oninput=sum);sum();
+ $("th").innerHTML=["auto","light","dark"].map(v=>'<option value="'+v+'"'+((S.theme||"auto")==v?" selected":"")+'>'+v[0].toUpperCase()+v.slice(1)+'</option>').join("");$("th").onchange=e=>{S.theme=e.target.value;save();theme()};
  $("sv").onclick=()=>{const d=rd();Object.assign(S,{name:$("sn").value.trim()||"My Pokémon Binder",count:d.c,rows:d.r,cols:d.l,sides:d.s,setup:true,sprites:$("sp")?$("sp").checked:false});save();tab="list";page=0;render()};
- $("ex").onclick=()=>{$("bk").value=JSON.stringify(S);$("bk").select();try{document.execCommand("copy")}catch(e){}};
- $("im").onclick=()=>{try{const d=JSON.parse($("bk").value);if(!d||typeof d.owned!="object")throw 0;S=d;S.setup=true;save();render()}catch(e){$("im").textContent="Invalid backup"}};
- $("rs").onclick=()=>{if(!rst){rst=1;$("rs").textContent="Tap again to confirm reset";return}rst=0;S.owned={};S.vars={};save();render()};
+ $("ex").onclick=()=>{S.lastBackup=Date.now();save();$("bk").value=JSON.stringify(S);$("bk").select();try{document.execCommand("copy")}catch(e){}};
+ $("im").onclick=()=>{try{const d=JSON.parse($("bk").value);if(!d||typeof d.owned!="object")throw 0;S=d;S.setup=true;S.up=S.up||{};save();render()}catch(e){$("im").textContent="Invalid backup"}};
+ $("rs").onclick=()=>{if(!rst){rst=1;$("rs").textContent="Tap again to confirm reset";return}rst=0;S.owned={};S.vars={};S.up={};save();render()};
 }
 function modal(n){
  const v=S.vars[n]||[],m=$("modal");
- m.innerHTML='<div class="sheet"><h2>'+im(n)+' #'+n+' '+N[n-1]+'</h2>'+tags(n)+'<label class="own"><input id="mo" type="checkbox" '+(S.owned[n]?"checked":"")+'> Slot filled</label><div>'+(v.map((x,i)=>'<div class="var">'+esc(x)+'<button data-d="'+i+'">✕</button></div>').join("")||'<small style="color:var(--mut)">No variants noted yet</small>')+'</div><div class="add"><input id="vi" placeholder="Add variant, e.g. Holo or Surfing"><button id="va">Add</button></div><button class="pri" id="vc">Done</button></div>';
+ m.innerHTML='<div class="sheet"><h2>'+im(n)+' #'+n+' '+N[n-1]+'</h2>'+tags(n)+'<label class="own"><input id="mo" type="checkbox" '+(S.owned[n]?"checked":"")+'> Slot filled</label><label class="own"><input id="mu" type="checkbox" '+(S.up[n]?"checked":"")+'> ★ Want an upgrade</label><div>'+(v.map((x,i)=>'<div class="var">'+esc(x)+'<button data-d="'+i+'">✕</button></div>').join("")||'<small style="color:var(--mut)">No variants noted yet</small>')+'</div><div class="add"><input id="vi" placeholder="Add variant, e.g. Holo or Surfing"><button id="va">Add</button></div><button class="pri" id="vc">Done</button></div>';
  m.className="open";
- $("mo").onchange=e=>{S.owned[n]=e.target.checked?1:0;save()};
- $("va").onclick=()=>{const t=$("vi").value.trim();if(!t)return;(S.vars[n]=S.vars[n]||[]).push(t);S.owned[n]=1;save();modal(n)};
+ $("mo").onchange=e=>setOwned(n,e.target.checked);
+ $("mu").onchange=e=>{if(e.target.checked)S.up[n]=1;else delete S.up[n];save()};
+ $("va").onclick=()=>{const t=$("vi").value.trim();if(!t)return;(S.vars[n]=S.vars[n]||[]).push(t);setOwned(n,1);save();modal(n)};
  m.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{S.vars[n].splice(+b.dataset.d,1);save();modal(n)});
  $("vc").onclick=()=>{m.className="";render()};
  m.onclick=e=>{if(e.target===m){m.className="";render()}};
 }
 $("main").onclick=e=>{
- const t=e.target,a=t.closest("[data-a]");
- if(a){page+=+a.dataset.a;hl=0;return vBinder()}
+ const t=e.target;
+ if(t.id=="bkb"){doBackup();render();return}
+ if(t.id=="nm"){if(nextMissing())render();else toast("Nothing missing. Binder complete!");return}
+ const a=t.closest("[data-a]");if(a){go(page+ +a.dataset.a,+a.dataset.a>0?"sl":"sr");return}
+ const mp=t.closest("[data-p]");if(mp){tab="binder";page=+mp.dataset.p;hl=0;render();window.scrollTo(0,0);return}
  const r=t.closest(".row"),tl=t.closest(".tile[data-t]");if(!r&&!tl)return;
  const n=+(r?r.dataset.n:tl.dataset.t);
- if(t.type=="checkbox"){S.owned[n]=t.checked?1:0;save();head();if(tl)vBinder();return}
+ if(t.type=="checkbox"){setOwned(n,t.checked);if(tl)vBinder();flush();return}
  if(r){tab="binder";page=Math.floor((n-1)/per());hl=n;render();window.scrollTo(0,0)}else modal(n);
 };
+$("toast").onclick=e=>{if(e.target.id=="ub"){const a=U.pop();if(a){S.owned[a.n]=a.o;save();pend=null;render()}$("toast").className=""}};
+let sx=0,sy=0;
+$("main").addEventListener("touchstart",e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+$("main").addEventListener("touchend",e=>{if(tab!="binder"||$("modal").className)return;const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>1.5*Math.abs(dy))go(page+(dx<0?1:-1),dx<0?"sl":"sr")},{passive:true});
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;rst=0;render()});
-render();
+theme();render();
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script></body></html>
