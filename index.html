@@ -9,7 +9,7 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141413;--card:#222220;--tx:#f0f0ea;--mut:#9a9a92;--bd:#38382f;--ac:#ef5a4e;--ok:#4cc27c;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#141413;--card:#222220;--tx:#f0f0ea;--mut:#9a9a92;--bd:#38382f;--ac:#ef5a4e;--ok:#4cc27c;color-scheme:dark}
 *,*:before,*:after{box-sizing:inherit}
-html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 -apple-system,system-ui,"Segoe UI",sans-serif}
+html,body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.35 ui-rounded,"SF Pro Rounded",-apple-system,system-ui,"Segoe UI",sans-serif}
 header{padding:12px 16px 4px;display:flex;justify-content:space-between;align-items:center;gap:8px}
 h1{font-size:19px;margin:0;flex:1}h2{font-size:16px;margin:18px 0 8px}
 #prog{color:var(--mut);font-size:13px;white-space:nowrap}
@@ -27,7 +27,7 @@ input[type=checkbox]{width:22px;height:22px;accent-color:var(--ok);flex:none}
 .danger{margin-top:14px;width:100%;padding:11px;border:1px solid var(--ac);color:var(--ac);background:none;border-radius:10px}
 .row{display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid var(--bd)}
 .row img{width:44px;height:44px;object-fit:contain;flex:none}.tile img{flex:1 1 0;min-height:0;max-width:100%;object-fit:contain}.sheet h2 img{width:56px;height:56px;object-fit:contain;vertical-align:middle}
-.num{color:var(--mut);width:48px;font-size:13px;font-variant-numeric:tabular-nums}
+.num{color:var(--mut);width:54px;font-size:13px;font-variant-numeric:tabular-nums}
 .row b{flex:1;font-weight:600}.row small{color:var(--mut);font-size:12px}
 .empty{color:var(--mut);text-align:center;padding:30px}
 .nav{display:flex;align-items:center;justify-content:space-between;text-align:center;margin:6px 0 12px}
@@ -94,6 +94,23 @@ label{display:block;margin:10px 0;font-size:13px;color:var(--mut)}label input,la
 .sp2{margin:0 0 10px;font-size:14px}.slist{max-height:42vh;overflow:auto}
 .bgd{display:flex;flex-wrap:wrap;gap:8px}.bg1{border:1px solid var(--bd);background:var(--card);border-radius:12px;padding:8px 12px;font-size:13px}.bg1.full{border-color:var(--ok);color:var(--ok);font-weight:600}
 .step{display:flex;align-items:center;gap:10px;margin:10px 0}.step button{width:34px;height:34px;border-radius:50%;border:1px solid var(--bd);background:var(--card);font-size:18px}
+#prog{display:flex;align-items:center;gap:8px}#prog small{font-size:12px}#prog svg text{fill:var(--tx)}
+.tag{display:inline-flex;align-items:center;gap:3px}.tag svg{flex:none}
+.pg{position:relative;padding-left:22px}.pg.r{padding-left:0;padding-right:22px}
+.rings{position:absolute;top:0;bottom:0;left:0;width:16px;display:flex;flex-direction:column;justify-content:space-around;align-items:center;padding:16px 0}
+.pg.r .rings{left:auto;right:0}.rings i{width:14px;height:14px;border-radius:50%;border:2.5px solid var(--mut);background:var(--bg);opacity:.75}
+.rb{display:flex;justify-content:space-between;align-items:baseline;border-left:4px solid var(--g);background:color-mix(in srgb,var(--g) 14%,transparent);border-radius:8px;padding:6px 12px;margin:0 0 10px}
+.rb b{font-size:14px}.rb span{font-size:12px;color:var(--mut)}
+.holo{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.45) 50%,transparent 62%);background-size:300% 100%;background-position:150% 0;animation:sh 7s ease-in-out infinite}
+@keyframes sh{0%,60%{background-position:150% 0}100%{background-position:-50% 0}}
+.tile input{appearance:none;-webkit-appearance:none;width:22px;height:22px;margin:0;border:2px solid color-mix(in srgb,var(--c) 60%,var(--bd));border-radius:50%;background:var(--card)}
+.tile input:checked{background:var(--ok);border-color:var(--ok)}
+.tile input:checked::after{content:"";position:absolute;left:5px;top:1px;width:5px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.ck{position:relative}.crow.got .ck::after{content:"";position:absolute;left:10px;top:4px;width:7px;height:14px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}
+.tile.nw input:checked::after,.crow.nw .ck::after{animation:ck .34s ease-out}
+@keyframes ck{0%{clip-path:inset(calc(100% - 4px) 100% 0 0)}40%{clip-path:inset(calc(100% - 4px) 0 0 0)}100%{clip-path:inset(0)}}
+@media (prefers-reduced-motion:reduce){.holo{display:none}.tile.nw input:checked::after,.crow.nw .ck::after{animation:none}}
+:root[data-theme="black"]{--bg:#000;--card:#0d0d0d;--tx:#f0f0ea;--mut:#8f8f88;--bd:#2a2a28;--ok:#4cc27c;color-scheme:dark}
 </style><link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-192.png">
 <meta name="theme-color" content="#d63a2f">
@@ -110,20 +127,26 @@ const TY="ldldldj-j-jck-k-k-g-g-gcgdgdgdacacaca-a-acacd-d-m-m-e-e-d-d-ded-d-der-
 const TN=["normal","fighting","flying","poison","ground","rock","bug","ghost","steel","fire","water","grass","electric","psychic","ice","dragon","dark","fairy"];
 const TC=["#A8A77A","#C22E28","#A98FF3","#A33EA1","#E2BF65","#B6A136","#A6B91A","#735797","#B7B7CE","#EE8130","#6390F0","#7AC74C","#F7D02C","#F95587","#96D9D6","#6F35FC","#705746","#D685AD"];
 const tp=n=>[TY[2*n-2],TY[2*n-1]].filter(c=>c!="-").map(c=>c.charCodeAt(0)-97);
-const tags=n=>'<span class="tags">'+tp(n).map(t=>'<span class="tag" style="--tc:'+TC[t]+'">'+TN[t]+'</span>').join("")+'</span>';
+const IC=["<circle cx=\"6\" cy=\"6\" r=\"4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\"/>", "<path d=\"M6 .8l1.5 3.7L11.2 6 7.5 7.5 6 11.2 4.5 7.5.8 6l3.7-1.5z\"/>", "<path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" d=\"M1.5 8.5Q6 1.5 10.5 8.5\"/>", "<circle cx=\"4.2\" cy=\"7.2\" r=\"2.6\"/><circle cx=\"8.3\" cy=\"4.3\" r=\"1.9\"/><circle cx=\"8.6\" cy=\"9\" r=\"1.2\"/>", "<rect x=\"1\" y=\"3.5\" width=\"10\" height=\"2.2\" rx=\"1\"/><rect x=\"1\" y=\"7.3\" width=\"10\" height=\"2.2\" rx=\"1\"/>", "<path d=\"M2 9.5L1.2 5 4.8 1.4 9.6 2.8 10.8 8 7.2 10.6z\"/>", "<path d=\"M6 1l4.5 2.5v5L6 11 1.5 8.5v-5z\"/>", "<path d=\"M2 11V6a4 4 0 0 1 8 0v5l-1.6-1.5L6.8 11 6 9.6 5.2 11 3.6 9.5z\"/>", "<path d=\"M4 1h4l3 3v4l-3 3H4L1 8V4z\"/>", "<path d=\"M6 .8c.9 2.7 3.8 3.6 3.8 6.4a3.8 3.8 0 0 1-7.6 0C2.2 5.6 3.4 5 4 3.2c.5 1 1.1 1.2 2-2.4z\"/>", "<path d=\"M6 1S2.4 5 2.4 7.4a3.6 3.6 0 0 0 7.2 0C9.6 5 6 1 6 1z\"/>", "<path d=\"M1.8 10.2C1.8 5.2 5 1.8 10.2 1.8c0 5.2-3.2 8.4-8.4 8.4z\"/>", "<path d=\"M7.2 1L2.8 6.6h3L4.8 11l4.6-5.8H6.4z\"/>", "<circle cx=\"6\" cy=\"6\" r=\"4.3\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"/><circle cx=\"6\" cy=\"6\" r=\"1.6\"/>", "<path fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" d=\"M6 1v10M1.7 3.5l8.6 5M10.3 3.5l-8.6 5\"/>", "<path d=\"M6 .8l5.2 5.2L6 11.2.8 6z\"/>", "<path d=\"M8.6 1.4a5 5 0 1 0 0 9.2 4 4 0 0 1 0-9.2z\"/>", "<path d=\"M6 .8c.5 3.2 1.8 4.7 5.2 5.2-3.4.5-4.7 2-5.2 5.2-.5-3.2-1.8-4.7-5.2-5.2C4.2 5.5 5.5 4 6 .8z\"/>"];
+const ic=t=>'<svg viewBox="0 0 12 12" width="11" height="11" fill="currentColor" aria-hidden="true">'+IC[t]+'</svg>';
+const tags=n=>'<span class="tags">'+tp(n).map(t=>'<span class="tag" style="--tc:'+TC[t]+'">'+ic(t)+TN[t]+'</span>').join("")+'</span>';
 const KEY="pokebinder_v1",$=id=>document.getElementById(id);
 let S=null;try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){}
 if(!S)S={setup:false,name:"My Pokémon Binder",count:N.length,rows:3,cols:3,sides:1,owned:{},vars:{}};
 S.up=S.up||{};S.dup=S.dup||{};S.log=S.log||[];S.ph=S.ph||{};
-let tab=S.setup?(S.tab||"list"):"setup",page=S.page||0,hl=0,flt="all",q="",rst=0,tfl=-1,gf=-1,LK={},U=[],pend=null,pgDone=false,dirc="",tmr;
+let tab=S.setup?(S.tab||"list"):"setup",page=S.page||0,hl=0,flt="all",q="",rst=0,tfl=-1,gf=-1,LK={},U=[],pend=null,pgDone=false,dirc="",tmr,lastTick=0;
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pn=n=>String(n).padStart(4,"0");
 const nf=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]/g,"");
 const total=()=>Math.min(S.count,N.length),per=()=>S.rows*S.cols,pages=()=>Math.ceil(total()/per());
 const plabel=p=>S.sides==2?"Sheet "+((p>>1)+1)+(p%2?" · Back":" · Front"):"Page "+(p+1);
 const nlabel=n=>plabel(Math.floor((n-1)/per()))+" · slot "+((n-1)%per()+1);
 const ownedCount=()=>{let c=0;for(let n=1;n<=total();n++)if(S.owned[n])c++;return c};
-function head(){$("title").textContent=S.name;const o=ownedCount(),t=total();$("prog").textContent=o+"/"+t+" · "+Math.round(o/t*100)+"%"}
+function head(){
+ $("title").textContent=S.name;const o=ownedCount(),t=total(),f=t?o/t:0,C=2*Math.PI*15,p=Math.round(f*100);
+ $("prog").innerHTML='<svg width="44" height="44" viewBox="0 0 42 42" role="img" aria-label="'+p+'% complete"><circle cx="21" cy="21" r="15" fill="none" style="stroke:var(--bd)" stroke-width="4"/><circle cx="21" cy="21" r="15" fill="none" style="stroke:var(--ac)" stroke-width="4" stroke-linecap="round" stroke-dasharray="'+(C*f).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 21 21)"/><text x="21" y="25" text-anchor="middle" font-size="11" font-weight="700">'+p+'</text></svg><small>'+o+'/'+t+'</small>';
+}
 const R=["Kanto","Johto","Hoenn","Sinnoh","Unova","Kalos","Alola","Galar","Paldea"],G=[151,251,386,493,649,721,809,905,1025],DAY=864e5;
 const genOf=n=>G.findIndex(e=>n<=e);
 function genDone(g){const a=g?G[g-1]+1:1,b=Math.min(G[g],total());if(a>b)return false;for(let n=a;n<=b;n++)if(!S.owned[n])return false;return true}
@@ -137,7 +160,7 @@ function undoOne(a){S.owned[a.n]=a.o;if(!a.o)dropLog(a.n)}
 function setOwned(n,v,g){
  const was=S.owned[n]?1:0;if(was==(v?1:0))return false;
  U.push({n,o:was,g});if(U.length>40)U.shift();
- S.owned[n]=v?1:0;if(v){S.log.push([Date.now(),n]);if(S.log.length>600)S.log.shift()}else dropLog(n);
+ S.owned[n]=v?1:0;if(v)lastTick=n;if(v){S.log.push([Date.now(),n]);if(S.log.length>600)S.log.shift()}else dropLog(n);
  save();head();if(!g)toast((v?"Ticked ":"Unticked ")+N[n-1],1);
  try{navigator.vibrate&&navigator.vibrate(10)}catch(e){}
  if(v){const k=genOf(n);if(genDone(k))pend=R[k]+" complete!";else{const o=ownedCount();if(o%100==0)pend=o+" cards collected!"}}
@@ -192,24 +215,26 @@ function rows(){
   if(!k||nf(N[n-1]).includes(k)||String(n)==q.trim())a.push(n);
  }
  if(k)a.sort((x,y)=>(nf(N[y-1]).startsWith(k)-nf(N[x-1]).startsWith(k))||x-y);
- $("res").innerHTML=a.length?a.map(n=>'<div class="row" data-n="'+n+'" style="border-left:4px solid '+TC[tp(n)[0]]+'">'+im(n)+'<span class="num">#'+n+'</span><b>'+N[n-1]+(S.up[n]?' <span class="st">★</span>':'')+(S.dup[n]?' <span class="st">⇄'+S.dup[n]+'</span>':'')+tags(n)+'</b><small>'+nlabel(n)+'</small><input type="checkbox" '+(S.owned[n]?"checked":"")+'></div>').join(""):'<p class="empty">No matches</p>';
+ $("res").innerHTML=a.length?a.map(n=>'<div class="row" data-n="'+n+'" style="border-left:4px solid '+TC[tp(n)[0]]+'">'+im(n)+'<span class="num">#'+pn(n)+'</span><b>'+N[n-1]+(S.up[n]?' <span class="st">★</span>':'')+(S.dup[n]?' <span class="st">⇄'+S.dup[n]+'</span>':'')+tags(n)+'</b><small>'+nlabel(n)+'</small><input type="checkbox" '+(S.owned[n]?"checked":"")+'></div>').join(""):'<p class="empty">No matches</p>';
 }
 function pstat(p){let c=0,k=0;for(let i=1;i<=per();i++){const n=p*per()+i;if(n>total())break;k++;if(S.owned[n])c++}return[c,k]}
 function vBinder(){
  const ps=pages();page=Math.max(0,Math.min(page,ps-1));const st=page*per(),[have,cnt]=pstat(page);
- const done=cnt>0&&have==cnt,pc=cnt?Math.round(have/cnt*100):0,lv=S.view=="list";
+ const lt=lastTick;lastTick=0;const done=cnt>0&&have==cnt,pc=cnt?Math.round(have/cnt*100):0,lv=S.view=="list";
  let opts="";for(let p=0;p<ps;p++){const[c,k]=pstat(p);opts+='<option value="'+p+'"'+(p==page?" selected":"")+'>'+plabel(p)+' · '+c+'/'+k+'</option>'}
  const dc={};for(let i=0;i<per();i++){const n=st+i+1;if(n>total())break;const t=tp(n)[0];dc[t]=(dc[t]||0)+1}
  const dom=Object.keys(dc).sort((a,b)=>dc[b]-dc[a])[0],tint=dom!==undefined?'background:color-mix(in srgb,'+TC[dom]+' 10%,transparent);':'';
- let h='<div class="nav"><button data-a="-1">◀</button><div><b>'+plabel(page)+'</b><small>'+(page+1)+' of '+ps+' page sides</small><div class="bar sm"><div class="fill'+(done?' full':'')+'" style="width:'+pc+'%"></div></div></div><button data-a="1">▶</button></div><div class="two jp"><button id="nm">Next missing</button><select id="pj">'+opts+'</select></div><div class="two jp"><button id="vw">'+(lv?"Grid view":"Checklist view")+'</button><button id="pp">'+(S.ph[page]?"Page photo":"Add page photo")+'</button></div>';
+ const lastN=Math.min(st+per(),total()),g1=genOf(st+1),g2=genOf(lastN),rb='<div class="rb" style="--g:'+GC[g1]+'"><b>'+(g1==g2?R[g1]:R[g1]+" → "+R[g2])+'</b><span>#'+pn(st+1)+'–'+pn(lastN)+'</span></div>';
+ let h=rb+'<div class="nav"><button data-a="-1">◀</button><div><b>'+plabel(page)+'</b><small>'+(page+1)+' of '+ps+' page sides</small><div class="bar sm"><div class="fill'+(done?' full':'')+'" style="width:'+pc+'%"></div></div></div><button data-a="1">▶</button></div><div class="two jp"><button id="nm">Next missing</button><select id="pj">'+opts+'</select></div><div class="two jp"><button id="vw">'+(lv?"Grid view":"Checklist view")+'</button><button id="pp">'+(S.ph[page]?"Page photo":"Add page photo")+'</button></div>';
+ h+='<div class="pg'+(S.sides==2&&page%2?' r':'')+'"><div class="rings"><i></i><i></i><i></i></div>';
  h+=lv?'<div class="clist'+(dirc?' '+dirc:'')+'" id="gr" style="'+tint+'">':'<div class="grid'+(dirc?' '+dirc:'')+'" id="gr" style="grid-template-columns:repeat('+S.cols+',1fr);'+tint+'padding:8px;border-radius:14px">';
  for(let i=0;i<per();i++){
   const n=st+i+1;if(n>total()){if(!lv)h+='<div class="tile ghost"></div>';continue}
   const v=(S.vars[n]||[]).length,tt=tp(n),o=S.owned[n],x=(S.up[n]?' ★':'')+(S.dup[n]?' ⇄'+S.dup[n]:'');
-  if(lv)h+='<div class="crow'+(o?" got":"")+(n==hl?" hl":"")+'" data-t="'+n+'" style="--c:'+TC[tt[0]]+'">'+im(n)+'<div class="ci"><small>#'+n+x+(v?' · '+v+' variant'+(v>1?'s':''):'')+'</small><b>'+N[n-1]+'</b>'+tags(n)+'</div><button class="dtl" aria-label="Details">⋯</button><span class="ck">'+(o?"✓":"")+'</span></div>';
-  else h+='<div class="tile'+(o?" got":"")+(n==hl?" hl":"")+'" data-t="'+n+'" style="--c:'+TC[tt[0]]+';--c2:'+TC[tt[1]===undefined?tt[0]:tt[1]]+'"><small>#'+n+x+'</small>'+im(n)+'<b>'+N[n-1]+'</b>'+tags(n)+(v?'<small>'+v+' variant'+(v>1?'s':'')+'</small>':'')+'<input type="checkbox" '+(o?"checked":"")+'></div>';
+  if(lv)h+='<div class="crow'+(o?" got":"")+(n==hl?" hl":"")+(n==lt?" nw":"")+'" data-t="'+n+'" style="--c:'+TC[tt[0]]+'">'+im(n)+'<div class="ci"><small>#'+pn(n)+x+(v?' · '+v+' variant'+(v>1?'s':''):'')+'</small><b>'+N[n-1]+'</b>'+tags(n)+'</div><button class="dtl" aria-label="Details">⋯</button><span class="ck"></span></div>';
+  else h+='<div class="tile'+(o?" got":"")+(n==hl?" hl":"")+(n==lt?" nw":"")+'" data-t="'+n+'" style="--c:'+TC[tt[0]]+';--c2:'+TC[tt[1]===undefined?tt[0]:tt[1]]+'"><small>#'+pn(n)+x+'</small>'+im(n)+'<b>'+N[n-1]+'</b>'+tags(n)+(v?'<small>'+v+' variant'+(v>1?'s':'')+'</small>':'')+(o?'<i class="holo" style="animation-delay:'+(i*.7)+'s"></i>':'')+'<input type="checkbox" '+(o?"checked":"")+'></div>';
  }
- $("main").innerHTML=h+'</div><p class="cnt'+(done?' ok':'')+'">'+(done?'✓ Page complete · ':'')+have+'/'+cnt+' on this page</p>';
+ $("main").innerHTML=h+'</div></div><p class="cnt'+(done?' ok':'')+'">'+(done?'✓ Page complete · ':'')+have+'/'+cnt+' on this page</p>';
  if(done)$("gr").classList.add("done");
  const was=LK[page];LK[page]=done;if(done&&was===false)pgDone=true;
  dirc="";$("pj").onchange=e=>{page=+e.target.value;hl=0;S.page=page;save();vBinder()};
@@ -251,7 +276,7 @@ function parseQ(v){
 }
 function quick(){
  sheet('<h2>Quick add</h2><p class="fine" style="margin:0 0 8px">Type numbers or names, separated by commas. Ranges like 1-10 work too.</p><input id="qi" placeholder="25, bulbasaur, 133" autocomplete="off" autocapitalize="off" enterkeyhint="done"><div id="qp" class="qp"></div><button class="pri" id="qg">Tick</button>');
- const upd=()=>{const r=parseQ($("qi").value),nw=r.ids.filter(n=>!S.owned[n]);$("qp").innerHTML=r.ids.slice(0,40).map(n=>'<span class="qc'+(S.owned[n]?' have':'')+'">#'+n+' '+N[n-1]+(S.owned[n]?' ✓':'')+'</span>').join("")+(r.ids.length>40?' <small>+'+(r.ids.length-40)+' more</small>':'')+r.bad.map(b=>'<span class="qc bad">'+esc(b)+'</span>').join("");$("qg").textContent=nw.length?"Tick "+nw.length+" card"+(nw.length>1?"s":""):"Nothing new to tick";return nw};
+ const upd=()=>{const r=parseQ($("qi").value),nw=r.ids.filter(n=>!S.owned[n]);$("qp").innerHTML=r.ids.slice(0,40).map(n=>'<span class="qc'+(S.owned[n]?' have':'')+'">#'+pn(n)+' '+N[n-1]+(S.owned[n]?' ✓':'')+'</span>').join("")+(r.ids.length>40?' <small>+'+(r.ids.length-40)+' more</small>':'')+r.bad.map(b=>'<span class="qc bad">'+esc(b)+'</span>').join("");$("qg").textContent=nw.length?"Tick "+nw.length+" card"+(nw.length>1?"s":""):"Nothing new to tick";return nw};
  const go2=()=>{const nw=upd();if(!nw.length)return;const g=Date.now(),o0=ownedCount();nw.forEach(n=>setOwned(n,1,g));const o1=ownedCount();if(!pend&&Math.floor(o1/100)>Math.floor(o0/100))pend=Math.floor(o1/100)*100+" cards collected!";$("modal").className="";render();toast(nw.length==1?"Ticked "+N[nw[0]-1]:"Ticked "+nw.length+" cards",1)};
  $("qi").oninput=upd;$("qi").onkeydown=e=>{if(e.key=="Enter")go2()};$("qg").onclick=go2;upd();setTimeout(()=>{const q=$("qi");q&&q.focus()},50);
 }
@@ -259,7 +284,7 @@ let shopG=-1,shopU=true;
 function shop(){
  const it=[];let c=0;
  for(let n=1;n<=total();n++){if(shopG>=0&&genOf(n)!=shopG)continue;if(!S.owned[n]||(shopU&&S.up[n])){const p=Math.floor((n-1)/per());(it[p]=it[p]||[]).push(n);c++}}
- let txt="",html="";const f=n=>"#"+n+" "+N[n-1]+(S.owned[n]?" (upgrade)":"");
+ let txt="",html="";const f=n=>"#"+pn(n)+" "+N[n-1]+(S.owned[n]?" (upgrade)":"");
  it.forEach((a,p)=>{if(!a)return;txt+=plabel(p)+": "+a.map(f).join(", ")+"\n";html+='<p class="sp2"><b>'+plabel(p)+'</b><br>'+a.map(f).join(", ")+'</p>'});
  sheet('<h2>Shopping list</h2><div class="two"><select id="sg"><option value="-1">All generations</option>'+R.map((r,i)=>'<option value="'+i+'"'+(shopG==i?" selected":"")+'>Gen '+(i+1)+' · '+r+'</option>').join("")+'</select><label class="own" style="margin:0"><input id="su" type="checkbox" '+(shopU?"checked":"")+'> Upgrades</label></div><p class="sum">'+c+' card'+(c==1?'':'s')+' to find</p><div class="slist">'+(html||'<p class="empty">Nothing to find here.</p>')+'</div><button class="pri" id="sc2">Copy as text</button>');
  $("sg").onchange=e=>{shopG=+e.target.value;shop()};$("su").onchange=e=>{shopU=e.target.checked;shop()};
@@ -270,7 +295,7 @@ function reorderWarn(oldP,newP,d,fin){
  for(let n=1;n<=Math.min(total(),d.c);n++)if(lab(n,oldP,S.sides)!=lab(n,newP,d.s))mv.push(n);
  if(!mv.length)return fin();
  const ex=[0,Math.floor(mv.length/2),mv.length-1].map(i=>mv[i]).filter((v,i,a)=>a.indexOf(v)==i);
- sheet('<h2>This moves cards</h2><p>'+mv.length+' of '+Math.min(total(),d.c)+' Pokémon would sit in a different spot in your binder. Your ticks stay with each Pokémon, but your physical pages would no longer match.</p><p class="sum">'+ex.map(n=>N[n-1]+' (#'+n+'): '+lab(n,oldP,S.sides)+' → '+lab(n,newP,d.s)).join('<br>')+'</p><button class="pri" id="ap">Apply change</button>');
+ sheet('<h2>This moves cards</h2><p>'+mv.length+' of '+Math.min(total(),d.c)+' Pokémon would sit in a different spot in your binder. Your ticks stay with each Pokémon, but your physical pages would no longer match.</p><p class="sum">'+ex.map(n=>N[n-1]+' (#'+pn(n)+'): '+lab(n,oldP,S.sides)+' → '+lab(n,newP,d.s)).join('<br>')+'</p><button class="pri" id="ap">Apply change</button>');
  $("ap").onclick=fin;
 }
 function vStats(){
@@ -296,7 +321,7 @@ function vSetup(){
  const rd=()=>({c:Math.max(1,Math.min(N.length,+$("sc").value||1)),r:Math.max(1,Math.min(6,+$("sr").value||1)),l:Math.max(1,Math.min(6,+$("sl").value||1)),s:+$("ss").value});
  const sum=()=>{const d=rd(),ps=Math.ceil(d.c/(d.r*d.l));$("sum").textContent=d.c+" cards at "+d.r*d.l+" per page side = "+ps+" page sides, so "+(d.s==2?Math.ceil(ps/2)+" sleeve sheets (front and back)":ps+" sleeve pages")+"."};
  ["sc","sr","sl","ss"].forEach(i=>$(i).oninput=sum);sum();
- $("th").innerHTML=["auto","light","dark"].map(v=>'<option value="'+v+'"'+((S.theme||"auto")==v?" selected":"")+'>'+v[0].toUpperCase()+v.slice(1)+'</option>').join("");$("th").onchange=e=>{S.theme=e.target.value;save();theme()};
+ $("th").innerHTML=["auto","light","dark","black"].map(v=>'<option value="'+v+'"'+((S.theme||"auto")==v?" selected":"")+'>'+v[0].toUpperCase()+v.slice(1)+'</option>').join("");$("th").onchange=e=>{S.theme=e.target.value;save();theme()};
  $("ts").innerHTML=[[100,"Normal"],[115,"Large"],[130,"Extra large"]].map(a=>'<option value="'+a[0]+'"'+((S.ts||100)==a[0]?" selected":"")+'>'+a[1]+'</option>').join("");$("ts").onchange=e=>{S.ts=+e.target.value;save();theme()};
  $("sv").onclick=()=>{const d=rd(),nm=$("sn").value.trim()||"My Pokémon Binder",spv=$("sp")?$("sp").checked:false,oldP=per(),newP=d.r*d.l,
   fin=()=>{const sd=S.sides;Object.assign(S,{name:nm,count:d.c,rows:d.r,cols:d.l,sides:d.s,setup:true,sprites:spv});save();tab="list";page=0;$("modal").className="";render()};
@@ -308,7 +333,7 @@ function vSetup(){
 }
 function modal(n){
  const v=S.vars[n]||[],m=$("modal");
- m.innerHTML='<div class="sheet"><h2>'+im(n)+' #'+n+' '+N[n-1]+'</h2>'+tags(n)+'<label class="own"><input id="mo" type="checkbox" '+(S.owned[n]?"checked":"")+'> Slot filled</label><label class="own"><input id="mu" type="checkbox" '+(S.up[n]?"checked":"")+'> ★ Want an upgrade</label><div class="step">Extras to trade <button id="dm">−</button><b id="dc">'+(S.dup[n]||0)+'</b><button id="dp">+</button></div><div>'+(v.map((x,i)=>'<div class="var">'+esc(x)+'<button data-d="'+i+'">✕</button></div>').join("")||'<small style="color:var(--mut)">No variants noted yet</small>')+'</div><div class="add"><input id="vi" placeholder="Add variant, e.g. Holo or Surfing"><button id="va">Add</button></div><button class="pri" id="vc">Done</button></div>';
+ m.innerHTML='<div class="sheet"><h2>'+im(n)+' #'+pn(n)+' '+N[n-1]+'</h2>'+tags(n)+'<label class="own"><input id="mo" type="checkbox" '+(S.owned[n]?"checked":"")+'> Slot filled</label><label class="own"><input id="mu" type="checkbox" '+(S.up[n]?"checked":"")+'> ★ Want an upgrade</label><div class="step">Extras to trade <button id="dm">−</button><b id="dc">'+(S.dup[n]||0)+'</b><button id="dp">+</button></div><div>'+(v.map((x,i)=>'<div class="var">'+esc(x)+'<button data-d="'+i+'">✕</button></div>').join("")||'<small style="color:var(--mut)">No variants noted yet</small>')+'</div><div class="add"><input id="vi" placeholder="Add variant, e.g. Holo or Surfing"><button id="va">Add</button></div><button class="pri" id="vc">Done</button></div>';
  m.className="open";
  $("mo").onchange=e=>setOwned(n,e.target.checked);
  $("mu").onchange=e=>{if(e.target.checked)S.up[n]=1;else delete S.up[n];save()};
